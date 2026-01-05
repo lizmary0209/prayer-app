@@ -1,0 +1,85 @@
+.faithCard {
+  position: relative;
+  border-radius: 18px;
+  padding: 14px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 232, 209, 0.7),
+    rgba(232, 241, 255, 0.7)
+  );
+  border: 1px solid rgba(31, 41, 55, 0.1);
+  box-shadow: 0 14px 34px rgba(31, 41, 55, 0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transform: translateY(0);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+  animation: fadeUp 360ms ease both;
+}
+
+.faithCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 44px rgba(31, 41, 55, 0.12);
+}
+
+.faithCard__front {
+  transition: opacity 160ms ease;
+}
+
+.faithCard__title {
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+.faithCard__hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(31, 41, 55, 0.65);
+}
+
+.faithCard__back {
+  position: absolute;
+  inset: 0;
+  padding: 14px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+}
+
+.faithCard:hover .faithCard__front {
+  opacity: 0;
+}
+
+.faithCard:hover .faithCard__back {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.faithCard__label {
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(31, 41, 55, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.faithCard__verse {
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
