@@ -45,7 +45,13 @@ router.post("/:id/like", authMiddleware, async (req, res) => {
         const card = await Card.findById(req.params.id);
         if (!card) return res.status(404).json({ message: "Card not found" });
 
+        if (!Array.isArray(card.likes)) {
+            card.likes = [];
+        }
+
         const userId = req.user.id;
+
+
         const alreadyLiked = card.likes.some((id) => id.toString() === userId);
 
         if (alreadyLiked) {
@@ -55,7 +61,9 @@ router.post("/:id/like", authMiddleware, async (req, res) => {
         }
 
         await card.save();
-        res.json({ message: "Like updated", card });
+
+
+        res.json({ message: "Like updated", card, });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Server error" });

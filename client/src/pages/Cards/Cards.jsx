@@ -87,6 +87,33 @@ function Cards() {
     }
   };
 
+  const handleLike = async (cardId) => {
+    try {
+        const token = localStorage.getItem("jwt");
+
+        if (!token) {
+            alert("Please log in to like a card (token not found).");
+            return;
+        }
+
+        const res = await fetch(`http://localhost:5000/api/cards/${cardId}/like`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!res.ok) throw new Error(`Like failed: ${res.status}`);
+
+        const data = await res.json();
+
+        setCards((prev) => prev.map((c) => (c._id === cardId ? data.card : c)));
+    } catch (err) {
+        console.error(err);
+        alert(err.message || "Could not like card");
+    }
+  };
+
   return (
     <main className="cards">
       <h1 className="cards__title">Encouragement Cards</h1>
@@ -100,7 +127,8 @@ function Cards() {
         {cards.map((card) => {
           const ref = card.reference || card.scripture;
           const v = verseState[card._id] || {};
-          const label = v.isOpen ? "Hide Verse" : "View Verse";
+          const verseBtnLabel = v.isOpen ? "Hide Verse" : "View Verse";
+          const likesCount = card.likes?.length || 0;
 
           return (
             <li className="cards__item" key={card._id}>
@@ -116,11 +144,25 @@ function Cards() {
                   onClick={() => toggleVerse(card)}
                   disabled={!ref}
                 >
-                  {label}
+                  {verseBtnLabel}
                 </button>
               </div>
 
               {card.message && <p className="cards__msg">{card.message}</p>}
+
+              <div className="cards__actions">
+                <button
+                className="cards__btn"
+                type="button"
+                onClick={() => handleLike(card._id)}
+                >
+                    Like
+                </button>
+
+                <span className="cards__likes">
+                    {likesCount} like{likesCount === 1 ? "" : "s" }
+                </span>
+              </div>
 
               {v.isOpen && (
                 <div className="cards__verse">
