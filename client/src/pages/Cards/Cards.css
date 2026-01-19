@@ -1,0 +1,50 @@
+.cards {
+    padding: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.cards__title {
+    font-size: 28px;
+    margin-bottom: 16px;
+}
+
+.cards__error {
+    color: crimson;
+}
+
+.cards__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.cards__item {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 14px;
+    background: white;
+}
+
+.cards__item-title {
+    margin: 0 0 6px 0;
+    font-size: 18px;
+}
+
+.cards__ref {
+    margin: 0;
+    font-weight: 600;
+}
+
+.cards__msg {
+    margin: 8px 0 0 0;
+    color: #374151;
+}
+
+@media (min-width: 720px) {
+    .cards__list {
+        grid-template-columns: 1fr 1fr;
+    }
+}
