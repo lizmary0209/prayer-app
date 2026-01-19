@@ -43,6 +43,43 @@
     color: #374151;
 }
 
+.cards__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.cards__btn {
+    border: 1px solid rgba(31, 41, 55, 0.12);
+    background: white;
+    border-radius: 12px;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.cards__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.cards__verse {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.cards__verse-text {
+    margin: 0;
+    white-space: pre-line;
+}
+
+.cards__muted {
+    margin-top: 8px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
 @media (min-width: 720px) {
     .cards__list {
         grid-template-columns: 1fr 1fr;
