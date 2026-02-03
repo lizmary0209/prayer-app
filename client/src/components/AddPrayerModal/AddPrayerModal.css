@@ -1,0 +1,84 @@
+.add-prayer__label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--green-900);
+    font-size: 18px;
+}
+
+.add-prayer__input {
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid rgba(169, 195, 181, 0.9);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px 12px;
+    font-family: var(--font-script);
+    font-size: 18px;
+    color: var(--ink-900);
+    outline: none;
+    margin-bottom: 12px;
+}
+
+.add-prayer__textarea {
+    width: 100%;
+    min-height: 160px;
+    border-radius: 16px;
+    border: 1px solid rgba(169, 195, 181, 0.9);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 12px 12px;
+    font-family: var(--font-script);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-900);
+    outline: none;
+}
+
+.add-prayer__textarea:focus {
+    border-color: rgba(176, 141, 69, 0.7);
+    box-shadow: 0 0 0 4px rgba(201, 173, 106, 0.25);
+}
+
+.add-prayer__error {
+    margin: 10px 0 0;
+    color: var(--brown-900);
+    background: rgba(231, 222, 209, 0.75);
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(139, 111, 71, 0.25);
+}
+
+.add-prayer__hint {
+    margin: 12px 0 0;
+    color: var(--brown-700);
+    opacity: 0.95;
+    font-size: 16px;
+}
+
+.btn {
+    border-radius: 16px;
+    padding: 10px 14px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-family: inherit;
+    font-size: 18px;
+}
+
+.btn--primary {
+    background: var(--green-700);
+    color: var(--gold-100);
+    border-color: rgba(169, 195, 181, 0.6);
+}
+
+.btn--primary:hover {
+    background: var(--green-500);
+}
+
+.btn--ghost {
+    background: rgba(255, 255, 255, 0.65);
+    color: var(--brown-700);
+    border-color: rgba(139, 111, 71, 0.25);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

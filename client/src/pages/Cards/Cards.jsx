@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { request } from "../../utils/api";
 import "./Cards.css";
 
-function Cards() {
+function Cards({ onPrayForCard, onOpenAuth }) {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -13,10 +14,7 @@ function Cards() {
         setLoading(true);
         setError("");
 
-        const res = await fetch("http://localhost:5000/api/cards");
-        if (!res.ok) throw new Error(`Failed to fetch cards: ${res.status}`);
-
-        const data = await res.json();
+        const data = await request("/api/cards");
         setCards(data.cards || []);
       } catch (err) {
         setError(err.message || "Something went wrong");
@@ -28,29 +26,27 @@ function Cards() {
     fetchCards();
   }, []);
 
+
   const toggleVerse = async (card) => {
     const cardId = card._id;
     const ref = card.reference || card.scripture;
     if (!ref) return;
 
-    let shouldFetch = false;
+    const current = verseState[cardId] || {};
+    const nextIsOpen = !current.isOpen;
+    
+    setVerseState((prev) => ({
+  ...prev,
+  [cardId]: {
+    ...current,
+    isOpen: nextIsOpen,
+    error: "",
+  },
+}));
 
-    setVerseState((prev) => {
-      const current = prev[cardId] || {};
-      const nextIsOpen = !current.isOpen;
-      shouldFetch = nextIsOpen && !current.text;
 
-      return {
-        ...prev,
-        [cardId]: {
-          ...current,
-          isOpen: nextIsOpen,
-          error: "",
-        },
-      };
-    });
-
-    if (!shouldFetch) return;
+const shouldFetch = nextIsOpen && !current.text;
+if (!shouldFetch) return;
 
     try {
       setVerseState((prev) => ({
@@ -58,12 +54,9 @@ function Cards() {
         [cardId]: { ...(prev[cardId] || {}), loading: true, error: "" },
       }));
 
-      const res = await fetch(
-        `http://localhost:5000/api/scripture?ref=${encodeURIComponent(ref)}`
+      const data = await request(
+        `/api/scripture?ref=${encodeURIComponent(ref)}`
       );
-      if (!res.ok) throw new Error(`Failed to fetch verse: ${res.status}`);
-
-      const data = await res.json();
 
       setVerseState((prev) => ({
         ...prev,
@@ -92,27 +85,23 @@ function Cards() {
         const token = localStorage.getItem("jwt");
 
         if (!token) {
-            alert("Please log in to like a card (token not found).");
+            alert("Please log in to like a card.");
             return;
         }
 
-        const res = await fetch(`http://localhost:5000/api/cards/${cardId}/like`, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+        const data = await request(`/api/cards/${cardId}/like`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
-        if (!res.ok) throw new Error(`Like failed: ${res.status}`);
-
-        const data = await res.json();
-
         setCards((prev) => prev.map((c) => (c._id === cardId ? data.card : c)));
-    } catch (err) {
-        console.error(err);
-        alert(err.message || "Could not like card");
-    }
-  };
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Could not like card");
+  }
+};
 
   return (
     <main className="cards">
@@ -157,6 +146,14 @@ function Cards() {
                 onClick={() => handleLike(card._id)}
                 >
                     Like
+                </button>
+
+                <button
+                className="cards__btn cards__btn--pray"
+                type="button"
+                onClick={() => onPrayForCard?.(card)}
+                >
+                  Pray on this
                 </button>
 
                 <span className="cards__likes">

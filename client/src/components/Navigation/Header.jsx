@@ -1,6 +1,6 @@
 import "./Header.css";
 
-export default function Header() {
+export default function Header({ onOpenLogin, onOpenAddPrayer }) {
   return (
     <header className="header">
       <div className="header__inner">
@@ -15,10 +15,10 @@ export default function Header() {
         </div>
 
         <nav className="header__actions">
-          <button className="btn btn--ghost" type="button">
+          <button className="btn btn--ghost" type="button" onClick={onOpenLogin}>
             Sign In
           </button>
-          <button className="btn btn--primary" type="button">
+          <button className="btn btn--primary" type="button" onClick={onOpenAddPrayer}>
             New Prayer
           </button>
         </nav>

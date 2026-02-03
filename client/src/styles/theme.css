@@ -1,0 +1,23 @@
+:root {
+  --green-900: #2F4F3E;
+  --green-700: #3F6B57;
+  --green-500: #5E8C73;
+  --green-300: #A9C3B5;
+  --green-100: #E6EFEA;
+
+  --gold-600: #B08D45;
+  --gold-400: #C9AD6A;
+  --gold-100: #F6F1E3;
+
+  --brown-900: #3A2E1F;
+  --brown-700: #5A4632;
+  --brown-500: #8B6F47;
+  --brown-200: #E7DED1;
+
+  --ink-900: #1F2937;
+  --ink-600: #4B5563;
+  --ink-300: #D1D5DB;
+  --white: #FFFFFF;
+
+  --font-script: "Playfair Script", "Playfair Display", cursive;
+}

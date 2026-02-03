@@ -1,0 +1,32 @@
+.auth__label {
+    display: block;
+    margin: 10px 0 6px;
+    color: var(--green-900);
+    font-size: 18px;
+}
+
+.auth__input {
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid rgba(169, 195, 181, 0.9);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px 12px;
+    font-family: var(--font-script);
+    font-size: 18px;
+    color: var(--ink-900);
+    outline: none;
+}
+
+.auth__input:focus {
+    border-color: rgba(176, 141, 69, 0.7);
+    box-shadow: 0 0 0 4px rgba(201, 173, 106, 0.25);
+}
+
+.auth__error {
+    margin-top: 12px;
+    color: var(--brown-900);
+    background: rgba(231, 222, 209, 0.75);
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(139, 111, 71, 0.25);
+}

@@ -5,12 +5,17 @@
 }
 
 .cards__title {
-    font-size: 28px;
+    font-size: 32px;
     margin-bottom: 16px;
+    color: var(--green-900);
 }
 
 .cards__error {
-    color: crimson;
+    color: var(--brown-900);
+    background: rgba(231, 222, 209, 0.7);
+    border: 1px solid rgba(139, 111, 71, 0.25);
+    padding: 10px 12px;
+    border-radius: 14px;
 }
 
 .cards__list {
@@ -22,10 +27,11 @@
 }
 
 .cards__item {
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
+    border: 1px solid rgba(169, 195, 181, 0.8);
+    border-radius: 18px;
     padding: 14px;
-    background: white;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(6px);
 }
 
 .cards__top {
@@ -37,25 +43,34 @@
 
 .cards__item-title {
     margin: 0 0 6px 0;
-    font-size: 18px;
+    font-size: 22px;
+    color: var(--green-900);
 }
 
 .cards__ref {
     margin: 0;
     font-weight: 600;
+    color: var(--brown-700);
 }
 
 .cards__msg {
-    margin: 8px 0 0 0;
-    color: #374151;
+    margin: 10px 0 0 0;
+    color: var(--ink-900);
+    opacity: 0.95;
 }
 
 .cards__btn {
-    border: 1px solid rgba(31, 41, 55, 0.12);
-    background: white;
-    border-radius: 12px;
-    padding: 8px 10px;
+    border: 1px solid rgba(169, 195, 181, 0.9);
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 16px;
+    padding: 8px 12px;
     cursor: pointer;
+    font-family: inherit;
+    color: var(--green-900);
+}
+
+.cards__btn:hover {
+    background: rgba(230, 239, 234, 0.9);
 }
 
 .cards__btn:disabled {
@@ -63,32 +78,43 @@
     cursor: not-allowed;
 }
 
+.cards__btn--pray {
+    border-color: rgba(139, 111, 71, 0.25);
+    background: rgba(246, 241, 227, 0.75);
+    color: var(--brown-700);
+}
+
+.cards__btn--pray:hover {
+    background: rgba(201, 173, 106, 0.25);
+}
+
 .cards__actions {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 .cards__likes {
-    color: #6b7280;
-    font-size: 14px
+    color: var(--ink-600);
+    font-size: 14px;
 }
 
 .cards__verse {
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid rgba(169, 195, 181, 0.75);
 }
 
 .cards__verse-text {
     margin: 0;
     white-space: pre-line;
+    color: var(--ink-900);
 }
 
 .cards__muted {
     margin-top: 8px;
-    color: #6b7280;
+    color: var(--ink-600);
     font-size: 14px;
 }
 
