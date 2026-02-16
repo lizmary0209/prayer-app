@@ -4,33 +4,36 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// POST /api/auth/signup
 router.post("/signup", async (req, res) => {
   try {
     const { email, password, displayName, profilePic } = req.body;
 
-    const existingUser = await User.findOne({ email });
+    const normalizedEmail = String(email || "").trim().toLowerCase();
+
+    // basic guard (nice errors instead of random 500s)
+    if (!normalizedEmail || !password || !displayName) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already in use" });
+      return res.status(409).json({ message: "Email already in use" });
     }
 
     const newUser = await User.create({
-      email,
+      email: normalizedEmail,
       password,
       displayName,
       profilePic,
     });
 
-    const payload = {
-      id: newUser._id,
-      email: newUser.email,
-      displayName: newUser.displayName,
-    };
-
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    // Minimal payload
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "User created successfully",
       token,
       user: {
@@ -41,16 +44,32 @@ router.post("/signup", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("SIGNUP ERROR:", error);
+
+    // TEMP DEBUG RESPONSE (remove later)
+    return res.status(500).json({
+      name: error.name,
+      message: error.message,
+      code: error.code,
+      keyPattern: error.keyPattern,
+      keyValue: error.keyValue,
+      errors: error.errors,
+    });
   }
 });
 
+// POST /api/auth/login
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const normalizedEmail = String(email || "").trim().toLowerCase();
+
+    if (!normalizedEmail || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email: normalizedEmail }).select("+password");
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -60,29 +79,32 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    const payload = {
-      id: user._id,
-      email: user.email,
-      displayName: user.displayName,
-    };
-
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
 
-    res.json({ 
+    return res.json({
       message: "Login successful",
-       token,
+      token,
       user: {
         id: user._id,
         email: user.email,
         displayName: user.displayName,
         profilePic: user.profilePic,
       },
-     });
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("LOGIN ERROR:", error);
+
+    // TEMP DEBUG RESPONSE (remove later)
+    return res.status(500).json({
+      name: error.name,
+      message: error.message,
+      code: error.code,
+      keyPattern: error.keyPattern,
+      keyValue: error.keyValue,
+      errors: error.errors,
+    });
   }
 });
 

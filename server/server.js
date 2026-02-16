@@ -6,7 +6,6 @@ require("dotenv").config();
 const authRoutes = require("./routes/authRoutes");
 const prayerRoutes = require("./routes/prayerRoutes");
 const userRoutes = require("./routes/userRoutes");
-const cardRoutes = require("./routes/cardRoutes");
 const devRoutes = require("./routes/devRoutes");
 const scriptureRoutes = require("./routes/scriptureRoutes");
 
@@ -24,7 +23,6 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/prayers", prayerRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/cards", cardRoutes);
 app.use("/api/dev", devRoutes);
 app.use("/api/scripture", scriptureRoutes);
 

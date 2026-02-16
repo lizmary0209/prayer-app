@@ -71,3 +71,29 @@
 .btn--ghost {
   background: rgba(255, 255, 255, 0.6);
 }
+
+.header__profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.header__profileLink {
+  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+  line-height: 1;
+}
+
+.header__profileLink:hover {
+  text-decoration: underline;
+}

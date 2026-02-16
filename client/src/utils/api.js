@@ -50,3 +50,7 @@ export function createPrayer(payload) {
         body: JSON.stringify(payload),
     });
 }
+
+export function getMe() {
+    return request("/api/users/me");
+}

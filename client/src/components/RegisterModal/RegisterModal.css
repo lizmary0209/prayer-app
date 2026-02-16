@@ -1,0 +1,14 @@
+.auth__link {
+    margin-top: 12px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    font: inherit;
+    opacity: 0.9;
+}
+
+.auth__link:hover {
+    opacity: 1;
+}

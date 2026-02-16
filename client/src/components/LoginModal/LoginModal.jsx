@@ -3,7 +3,7 @@ import Modal from "../Modal/Modal";
 import { login } from "../../utils/api";
 import "./LoginModal.css";
 
-export default function LoginModal({ isOpen, onClose }) {
+export default function LoginModal({ isOpen, onClose, onLoggedIn, onOpenRegister }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,6 +31,8 @@ export default function LoginModal({ isOpen, onClose }) {
             const data = await login({ email, password });
 
             localStorage.setItem("jwt", data.token);
+            onLoggedIn?.(data.user);
+
 
             onClose();
         } catch (err) {
@@ -79,6 +81,8 @@ export default function LoginModal({ isOpen, onClose }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
+                autoComplete="email"
+                required
                 />
 
                 <label className="auth__label" htmlFor="login-password">
@@ -91,9 +95,24 @@ export default function LoginModal({ isOpen, onClose }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your password"
+                autoComplete="current-password"
+                minLength={6}
+                maxLength={50}
+                required
                 />
 
                 {error && <p className="auth__error"></p>}
+
+                {onOpenRegister && (
+                    <button
+                    type="button"
+                    className="auth__link"
+                    onClick={onOpenRegister}
+                    disabled={isSubmitting}
+                    >
+                        Don't have an account? Register
+                    </button>
+                )}
             </form>
         </Modal>
     );

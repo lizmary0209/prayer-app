@@ -4,9 +4,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const Prayer = require("../models/Prayer");
 
 router.get("/protected", authMiddleware, (req, res) => {
-  res.json({
-    message: `Hello ${req.user.displayName}, you have accessed a protected route!`,
-  });
+  res.json({ message:"Protected route ok", user:req.user });
 });
 
 router.post("/", authMiddleware, async (req, res) => {
@@ -89,6 +87,34 @@ router.post("/:id/comment", authMiddleware, async (req, res) => {
       message: "Comment added",
       prayer,
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/:id/like", authMiddleware, async (req, res) => {
+  try {
+    const prayer = await Prayer.findById(req.params.id);
+    if (!prayer) return res.status(404).json({ message: "Prayer not found" });
+
+    if (!Array.isArray(prayer.likes)) {
+      prayer.likes = [];
+    }
+
+    const userId = req.user.id;
+
+    const alreadyLiked = prayer.likes.some((id) => id.toString() === userId);
+
+    if (alreadyLiked) {
+      prayer.likes = prayer.likes.filter((id) => id.toString() !== userId);
+    } else {
+      prayer.likes.push(userId);
+    }
+
+    await prayer.save();
+
+    res.json({ message: "Like updated", prayer });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

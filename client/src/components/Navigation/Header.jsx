@@ -1,6 +1,21 @@
+import { Link } from "react-router-dom";
 import "./Header.css";
 
-export default function Header({ onOpenLogin, onOpenAddPrayer }) {
+export default function Header({
+  isLoggedIn,
+  currentUser,
+  onOpenLogin,
+  onOpenRegister,
+  onOpenAddPrayer,
+  onLogout,
+}) {
+  const avatarSrc =
+  currentUser?.profilePic?.trim() ||
+  "https://ui-avatars.com/api/?name=User&background=EEE&color=555&size=64";
+
+  const displayName = currentUser?.displayName || "Profile";
+
+
   return (
     <header className="header">
       <div className="header__inner">
@@ -15,12 +30,56 @@ export default function Header({ onOpenLogin, onOpenAddPrayer }) {
         </div>
 
         <nav className="header__actions">
-          <button className="btn btn--ghost" type="button" onClick={onOpenLogin}>
-            Sign In
-          </button>
-          <button className="btn btn--primary" type="button" onClick={onOpenAddPrayer}>
-            New Prayer
-          </button>
+          {!isLoggedIn ? (
+            <>
+              <button
+                className="btn btn--ghost"
+                type="button"
+                onClick={onOpenLogin}
+              >
+                Sign In
+              </button>
+
+              <button
+                className="btn btn--primary"
+                type="button"
+                onClick={onOpenRegister}
+              >
+                Register
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="btn btn--primary"
+                type="button"
+                onClick={onOpenAddPrayer}
+              >
+                New Prayer
+              </button>
+
+              <div className="header__profile">
+                <img
+                className="header__avatar"
+                src={avatarSrc}
+                alt={`${displayName} avatar`}
+                referrerPolicy="no-referrer"
+                />
+                <Link className="header__profileLink" to="/profile">
+                {displayName}
+                </Link>
+              </div>
+              
+
+              <button
+                className="btn btn--ghost"
+                type="button"
+                onClick={onLogout}
+              >
+                Logout
+              </button>
+            </>
+          )}
         </nav>
       </div>
     </header>
