@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import "./Header.css";
+import prayerHands from "../../assets/prayerhands.png";
+
 
 export default function Header({
   isLoggedIn,
@@ -20,14 +22,18 @@ export default function Header({
     <header className="header">
       <div className="header__inner">
         <div className="brand">
-          <div className="brand__mark" aria-hidden="true">
-            ✦
-          </div>
-          <div className="brand__text">
-            <div className="brand__title">Prayer App</div>
-            <div className="brand__sub">Simple. Warm. Faith-centered.</div>
-          </div>
-        </div>
+  <div className="brand__mark" aria-hidden="true">
+   <img src={prayerHands} alt="Selah logo" className="brand__icon" />
+  </div>
+
+  <div className="brand__text">
+    <div className="brand__nameRow">
+      <div className="brand__name">Selah</div>
+      <span className="brand__dot" aria-hidden="true">•</span>
+      <div className="brand__sub">Because your prayers matter.</div>
+    </div>
+  </div>
+</div>
 
         <nav className="header__actions">
           {!isLoggedIn ? (

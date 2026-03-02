@@ -1,125 +1,240 @@
 .cards {
-    padding: 24px;
-    max-width: 900px;
-    margin: 0 auto;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 16px 28px;
 }
 
 .cards__title {
-    font-size: 32px;
-    margin-bottom: 16px;
-    color: var(--green-900);
+  margin: 10px 0 18px;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  color: #24402b;
 }
 
 .cards__error {
-    color: var(--brown-900);
-    background: rgba(231, 222, 209, 0.7);
-    border: 1px solid rgba(139, 111, 71, 0.25);
-    padding: 10px 12px;
-    border-radius: 14px;
-}
-
-.cards__list {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-}
-
-.cards__item {
-    border: 1px solid rgba(169, 195, 181, 0.8);
-    border-radius: 18px;
-    padding: 14px;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(6px);
-}
-
-.cards__top {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: flex-start;
-}
-
-.cards__item-title {
-    margin: 0 0 6px 0;
-    font-size: 22px;
-    color: var(--green-900);
-}
-
-.cards__ref {
-    margin: 0;
-    font-weight: 600;
-    color: var(--brown-700);
-}
-
-.cards__msg {
-    margin: 10px 0 0 0;
-    color: var(--ink-900);
-    opacity: 0.95;
-}
-
-.cards__btn {
-    border: 1px solid rgba(169, 195, 181, 0.9);
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 16px;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-family: inherit;
-    color: var(--green-900);
-}
-
-.cards__btn:hover {
-    background: rgba(230, 239, 234, 0.9);
-}
-
-.cards__btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.cards__btn--pray {
-    border-color: rgba(139, 111, 71, 0.25);
-    background: rgba(246, 241, 227, 0.75);
-    color: var(--brown-700);
-}
-
-.cards__btn--pray:hover {
-    background: rgba(201, 173, 106, 0.25);
-}
-
-.cards__actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 12px;
-}
-
-.cards__likes {
-    color: var(--ink-600);
-    font-size: 14px;
-}
-
-.cards__verse {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(169, 195, 181, 0.75);
-}
-
-.cards__verse-text {
-    margin: 0;
-    white-space: pre-line;
-    color: var(--ink-900);
+  color: #b42318;
+  margin: 10px 0;
+  font-weight: 600;
 }
 
 .cards__muted {
-    margin-top: 8px;
-    color: var(--ink-600);
-    font-size: 14px;
+  color: rgba(36, 64, 43, 0.7);
+  margin: 10px 0;
 }
 
-@media (min-width: 720px) {
-    .cards__list {
-        grid-template-columns: 1fr 1fr;
-    }
+.cards__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+
+.cards__item {
+  width: 100%;
+  border: 1px solid rgba(53, 94, 59, 0.18);
+  border-radius: 18px;
+  overflow: hidden;
+  background: transparent;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.05);
+}
+
+.cards__item:focus {
+  outline: 3px solid rgba(176, 141, 60, 0.35);
+  outline-offset: 3px;
+}
+
+
+.cards__track {
+  display: flex;
+  width: 200%;
+  transition: transform 280ms ease;
+  will-change: transform;
+  align-items: stretch;
+}
+
+.cards__item--open .cards__track {
+  transform: translateX(-50%);
+}
+
+
+.cards__panel {
+  width: 50%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.cards__panel--front {
+  position: relative;
+  overflow: hidden;
+  background: #e9efe4;
+}
+
+.cards__cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-color: #e9efe4;
+  transform: scale(1.06);
+  filter: saturate(1) contrast(1.02);
+}
+
+.cards__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(251, 251, 247, 0.68) 0%,
+    rgba(251, 251, 247, 0.38) 35%,
+    rgba(251, 251, 247, 0.18) 70%,
+    rgba(251, 251, 247, 0.06) 100%
+  );
+}
+
+
+.cards__panel--back {
+  background: #fbfbf7;
+}
+
+
+.cards__content {
+  position: relative;
+  z-index: 1;
+  padding: 18px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.cards__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cards__item-title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.1;
+  color: #24402b;
+  letter-spacing: -0.02em;
+}
+
+.cards__ref {
+  margin: 6px 0 0;
+  font-weight: 700;
+  color: rgba(36, 64, 43, 0.8);
+}
+
+.cards__msg {
+  margin: 0;
+  color: rgba(17, 24, 39, 0.86);
+  line-height: 1.5;
+  font-size: 15px;
+}
+
+.cards__verse {
+  border: 1px solid rgba(53, 94, 59, 0.16);
+  background: rgba(246, 243, 232, 0.7);
+  border-radius: 14px;
+  padding: 12px 12px;
+}
+
+.cards__verse-text {
+  margin: 0 0 10px;
+  color: rgba(17, 24, 39, 0.86);
+  line-height: 1.5;
+}
+
+
+.cards__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.cards__btn {
+  border: 1px solid rgba(53, 94, 59, 0.22);
+  background: rgba(251, 251, 247, 0.9);
+  color: #24402b;
+  border-radius: 999px;
+  padding: 9px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.cards__btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+}
+
+.cards__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.cards__btn--pray {
+  border-color: rgba(176, 141, 60, 0.35);
+  background: rgba(246, 237, 210, 0.85);
+}
+
+
+.cards__likes {
+  color: rgba(36, 64, 43, 0.9);
+  font-weight: 800;
+  font-size: 12px;
+  white-space: nowrap;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(251, 251, 247, 0.82);
+  border: 1px solid rgba(53, 94, 59, 0.18);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+
+.cards__hint {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(36, 64, 43, 0.9);
+
+  align-self: flex-start;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(251, 251, 247, 0.78);
+  border: 1px solid rgba(53, 94, 59, 0.18);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+
+
+@media (max-width: 520px) {
+  .cards__item-title {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cards__list {
+    grid-template-columns: 1fr;
+  }
 }
