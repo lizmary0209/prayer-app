@@ -47,7 +47,7 @@ export default function RegisterModal({
 
             localStorage.setItem("jwt", data.token);
             onRegistered?.(data.user);
-            onClose();
+
         } catch (err) {
             setError(err.message || "Registration failed.");
         } finally {
@@ -117,6 +117,7 @@ export default function RegisterModal({
                 id="reg-password"
                 className="auth__input"
                 type="password"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
                 minLength={6}
@@ -124,7 +125,7 @@ export default function RegisterModal({
                 required
                 />
 
-                <label classname="auth__label" htmlFor="reg-avatar">
+                <label className="auth__label" htmlFor="reg-avatar">
                     Profile Picture URL (optional)
                 </label>
                 <input

@@ -62,7 +62,7 @@ const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
     getMe()
     .then((data) => {
-      setCurrentUser(data.user || null);
+      setCurrentUser(data?.user || data || null);
       setIsLoggedIn(true);
     })
     .catch(() => {
@@ -104,7 +104,14 @@ const [isRegisterOpen, setIsRegisterOpen] = useState(false);
         />
       }
       />
-      <Route path="/profile" element={<Profile currentUser={currentUser} />} />
+      <Route path="/profile"
+       element={
+       <Profile
+        currentUser={currentUser}
+        onUserUpdate={(user) => setCurrentUser(user)}
+        />
+        }
+         />
    </Routes>
 
     <FloatingPrayButton onClick={() => {

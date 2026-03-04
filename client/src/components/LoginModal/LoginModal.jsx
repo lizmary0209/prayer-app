@@ -34,7 +34,6 @@ export default function LoginModal({ isOpen, onClose, onLoggedIn, onOpenRegister
             onLoggedIn?.(data.user);
 
 
-            onClose();
         } catch (err) {
             setError(err.message || "Login failed.");
         } finally {
@@ -101,7 +100,7 @@ export default function LoginModal({ isOpen, onClose, onLoggedIn, onOpenRegister
                 required
                 />
 
-                {error && <p className="auth__error"></p>}
+                {error && <p className="auth__error">{error}</p>}
 
                 {onOpenRegister && (
                     <button

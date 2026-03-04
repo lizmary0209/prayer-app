@@ -54,3 +54,14 @@ export function createPrayer(payload) {
 export function getMe() {
     return request("/api/users/me");
 }
+
+export function updateMe(payload) {
+    return request("/api/users/me", {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+    });
+}
+
+export function getMyPrayers() {
+    return request("/api/users/me/prayers");
+}
