@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { request } from "../../utils/api";
 import "./Cards.css";
 
+import AddPrayerModal from "../../components/AddPrayerModal/AddPrayerModal";
+
 const COVER_POOLS = {
   forest: [
     "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=60",
@@ -71,19 +73,25 @@ const CATEGORY_RULES = [
 ];
 
 function getCoverCategory(card) {
+  if (card?.category) return card.category;
+
+  
   const haystack = `${card?.title || ""} ${card?.scripture || ""} ${card?.description || ""}`.toLowerCase();
 
   for (const rule of CATEGORY_RULES) {
     if (rule.keywords.some((k) => haystack.includes(k))) return rule.category;
   }
+
   return "neutral";
 }
 
 function hashString(str) {
   let hash = 0;
+
   for (let i = 0; i < str.length; i += 1) {
     hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
   }
+
   return hash;
 }
 
@@ -97,12 +105,14 @@ function getNatureImage(card) {
   return pool[idx];
 }
 
-function Cards() {
+function Cards({ currentUser, refreshToken }) {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [verseState, setVerseState] = useState({});
   const [openCardId, setOpenCardId] = useState(null);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -120,16 +130,16 @@ function Cards() {
     };
 
     fetchCards();
-  }, []);
+  }, [refreshToken]);
 
   const toggleCardSlide = (id) => {
     setOpenCardId((prev) => (prev === id ? null : id));
   };
 
-
   const toggleVerse = async (card) => {
     const prayerId = card._id;
     const ref = card.scripture;
+
     if (!ref) return;
 
     const current = verseState[prayerId] || {};
@@ -150,7 +160,11 @@ function Cards() {
     try {
       setVerseState((prev) => ({
         ...prev,
-        [prayerId]: { ...(prev[prayerId] || {}), loading: true, error: "" },
+        [prayerId]: {
+          ...(prev[prayerId] || {}),
+          loading: true,
+          error: "",
+        },
       }));
 
       const data = await request(`/api/scripture?ref=${encodeURIComponent(ref)}`);
@@ -225,23 +239,82 @@ function Cards() {
     }
   };
 
+const handleEditClick = (card) => {
+  const currentUserId = currentUser?._id || currentUser?.id;
+  const ownerId = card.createdBy?._id || card.createdBy?.id;
+  const isOwner = ownerId === currentUserId;
+
+  if (!isOwner) {
+    alert("You can only edit your own prayers.");
+    return;
+  }
+
+  setSelectedCard(card);
+  setIsEditOpen(true);
+};
+
+  const handleCloseEdit = () => {
+    setIsEditOpen(false);
+    setSelectedCard(null);
+  };
+
+  const handleUpdatePrayer = async (updatedPrayerData) => {
+    try {
+      if (!selectedCard?._id) return;
+
+      const token = localStorage.getItem("jwt");
+      if (!token) {
+        alert("Please log in to edit a prayer.");
+        return;
+      }
+
+      const data = await request(`/api/prayers/${selectedCard._id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedPrayerData),
+      });
+
+      setCards((prev) =>
+        prev.map((card) => (card._id === selectedCard._id ? data.prayer : card))
+      );
+
+      handleCloseEdit();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Could not update prayer");
+    }
+  };
+
   return (
     <main className="cards">
       <h1 className="cards__title">Encouragement Cards</h1>
 
       {loading && <p className="cards__muted">Loading cards...</p>}
       {error && <p className="cards__error">{error}</p>}
-      {!loading && !error && cards.length === 0 && <p className="cards__muted">No cards yet.</p>}
+      {!loading && !error && cards.length === 0 && (
+        <p className="cards__muted">No cards yet.</p>
+      )}
 
       <ul className="cards__list">
-        {cards.map((card) => {
-          const ref = card.scripture;
-          const v = verseState[card._id] || {};
-          const verseBtnLabel = v.isOpen ? "Hide Verse" : "View Verse";
-          const likesCount = card.likes?.length || 0;
-          const prayedCount = card.prayedCount || 0;
+       {cards.map((card) => {
+  const ref = card.scripture;
+  const v = verseState[card._id] || {};
+  const verseBtnLabel = v.isOpen ? "Hide Verse" : "View Verse";
+  const likesCount = card.likes?.length || 0;
+  const prayedCount = card.prayedCount || 0;
+  const isOpen = openCardId === card._id;
+  const currentUserId = currentUser?._id || currentUser?.id;
+  const ownerId = card.createdBy?._id || card.createdBy?.id;
+  const isOwner = ownerId === currentUserId;
 
-          const isOpen = openCardId === card._id;
+  console.log("CARD DEBUG:", {
+  title: card.title,
+  category: card.category,
+  imageCategory: getCoverCategory(card),
+});
 
           return (
             <li
@@ -252,7 +325,9 @@ function Cards() {
               tabIndex={0}
               aria-expanded={isOpen}
               onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") toggleCardSlide(card._id);
+                if (e.key === "Enter" || e.key === " ") {
+                  toggleCardSlide(card._id);
+                }
               }}
             >
               <div className="cards__track">
@@ -283,7 +358,6 @@ function Cards() {
                       </button>
                     </div>
 
-
                     <div className="cards__actions">
                       <button
                         className="cards__btn"
@@ -307,16 +381,30 @@ function Cards() {
                         Pray on this
                       </button>
 
+                      {isOwner && (
+                        <button
+                          className="cards__btn"
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditClick(card);
+                          }}
+                        >
+                          Edit
+                        </button>
+                      )}
+
                       <span className="cards__likes">
                         {likesCount} like{likesCount === 1 ? "" : "s"} •{" "}
                         {prayedCount} prayer{prayedCount === 1 ? "" : "s"}
                       </span>
                     </div>
 
-                    <div className="cards__hint">{isOpen ? "Tap to go back" : "Tap to read"}</div>
+                    <div className="cards__hint">
+                      {isOpen ? "Tap to go back" : "Tap to read"}
+                    </div>
                   </div>
                 </div>
-
 
                 <div className="cards__panel cards__panel--back">
                   <div className="cards__content">
@@ -339,7 +427,6 @@ function Cards() {
                       </button>
                     </div>
 
-                   
                     {card.description && <p className="cards__msg">{card.description}</p>}
 
                     <div className="cards__verse">
@@ -384,6 +471,19 @@ function Cards() {
                         Pray on this
                       </button>
 
+                      {isOwner && (
+                        <button
+                          className="cards__btn"
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditClick(card);
+                          }}
+                        >
+                          Edit
+                        </button>
+                      )}
+
                       <span className="cards__likes">
                         {likesCount} like{likesCount === 1 ? "" : "s"} •{" "}
                         {prayedCount} prayer{prayedCount === 1 ? "" : "s"}
@@ -398,6 +498,16 @@ function Cards() {
           );
         })}
       </ul>
+
+      {isEditOpen && selectedCard && (
+        <AddPrayerModal
+          isOpen={isEditOpen}
+          onClose={handleCloseEdit}
+          onSubmit={handleUpdatePrayer}
+          seed={selectedCard}
+          mode="edit"
+        />
+      )}
     </main>
   );
 }

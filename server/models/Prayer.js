@@ -10,6 +10,7 @@ const PrayerSchema = new mongoose.Schema(
     title: { type: String, required: true, trim: true },
     description: { type: String, required: true },
     scripture: { type: String, default: "" },
+    category: { type: String, enum: ["sunrise", "water", "mountains", "forest", "fields", "neutral" ], default: "neutral", },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
     prayedCount: { type: Number, default: 0 },
     comments: [

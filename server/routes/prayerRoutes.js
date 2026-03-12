@@ -9,7 +9,7 @@ router.get("/protected", authMiddleware, (req, res) => {
 
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const { title, description, scripture } = req.body;
+    const { title, description, scripture, category } = req.body;
 
     if (!title || !description) {
       return res
@@ -21,8 +21,11 @@ router.post("/", authMiddleware, async (req, res) => {
       title,
       description,
       scripture: scripture || "",
+      category: category || "neutral",
       createdBy: req.user.id,
     });
+
+    await newPrayer.populate("createdBy", "displayName profilePic");
 
     res.status(201).json({
       message: "Prayer request created successfully",
@@ -43,6 +46,37 @@ router.get("/", async (req, res) => {
     res.status(200).json({
       message: "Prayers fetched successfully",
       prayers,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.patch("/:id", authMiddleware, async (req, res) => {
+  try {
+    const { title, description, scripture, category } = req.body;
+    const prayer = await Prayer.findById(req.params.id);
+
+    if (!prayer) {
+      return res.status(404).json({ message: "Prayer not found" });
+    }
+
+    if (prayer.createdBy.toString() !== req.user.id.toString()) {
+      return res.status(403).json({ message: "You can only edit your own prayers." });
+    }
+
+    if (title !== undefined) prayer.title = title;
+    if (description !== undefined) prayer.description = description;
+    if (scripture !== undefined) prayer.scripture = scripture;
+    if (category !== undefined) prayer.category = category;
+
+    await prayer.save();
+    await prayer.populate("createdBy", "displayName profilePic");
+
+    res.status(200).json({
+      message: "Prayer updated successfully",
+      prayer,
     });
   } catch (error) {
     console.error(error);
@@ -103,7 +137,6 @@ router.post("/:id/like", authMiddleware, async (req, res) => {
     }
 
     const userId = req.user.id;
-
     const alreadyLiked = prayer.likes.some((id) => id.toString() === userId);
 
     if (alreadyLiked) {

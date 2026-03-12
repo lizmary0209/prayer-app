@@ -19,6 +19,7 @@ const [isPrayerOpen, setIsPrayerOpen] =useState(false);
 const [prayerSeed, setPrayerSeed] = useState(null);
 const [isLoginOpen, setIsLoginOpen] = useState(false);
 const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+const [cardsRefreshToken, setCardsRefreshToken] = useState(0);
 
 
   function openPrayerModal(seed = null) {
@@ -88,22 +89,19 @@ const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
 
     <Routes>
-      <Route path="/" element={<Navigate to="/cards" replace />} />
-        <Route
-        path="/cards"
-        element={
-          <Cards
-        onPrayForCard={(card) =>
-          openPrayerModal({
-            cardId: card._id,
-            scripture: card.scripture,
-            title: card.title,
-          })
-        }
-        onOpenAuth={openLoginModal}
-        />
-      }
+      <Route path="/" 
+      element={
+      <Cards currentUser={currentUser}
+      refreshToken={cardsRefreshToken}
+      />} 
       />
+
+      <Route
+      path="cards"
+      element={<Navigate to="/" replace />}
+      />
+
+
       <Route path="/profile"
        element={
        <Profile
@@ -124,6 +122,11 @@ const [isRegisterOpen, setIsRegisterOpen] = useState(false);
       isOpen={isPrayerOpen}
        onClose={closePrayerModal}
         seed={prayerSeed}
+        onSubmit={async (prayerData) => {
+          const { createPrayer } = await import("./utils/api");
+          await createPrayer(prayerData);
+          setCardsRefreshToken((prev) => prev + 1);
+        }}
          />
 
          <LoginModal

@@ -3,24 +3,39 @@ import Modal from "../Modal/Modal";
 import { createPrayer } from "../../utils/api";
 import "./AddPrayerModal.css";
 
-export default function AddPrayerModal({ isOpen, onClose, seed }) {
+const CATEGORY_OPTIONS = [
+  { value: "sunrise", label: "Hope & Joy" },
+  { value: "water", label: "Peace & Rest" },
+  { value: "mountains", label: "Strength & Courage" },
+  { value: "forest", label: "Healing & Comfort" },
+  { value: "fields", label: "Provision & Growth" },
+  { value: "neutral", label: "Simple / Neutral" },
+];
+
+export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode = "add" }) {
   const initialTitle = useMemo(() => seed?.title || "", [seed]);
-  const initialScripture = useMemo(() => seed?.reference || "", [seed]);
+  const initialScripture = useMemo(() => seed?.scripture || "", [seed]);
+  const initialDescription = useMemo(() => seed?.description || "", [seed]);
+  const initialCategory = useMemo(() => seed?.category || "neutral", [seed]);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [scripture, setScripture] = useState("");
+  const [category, setCategory] = useState("neutral");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (!isOpen) return;
+
+
     setTitle(initialTitle);
-    setDescription("");
+    setDescription(initialDescription);
     setScripture(initialScripture);
+    setCategory(initialCategory);
     setError("");
     setIsSaving(false);
-  }, [isOpen, initialTitle, initialScripture]);
+  }, [isOpen, initialTitle, initialDescription, initialScripture, initialCategory]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -31,13 +46,22 @@ export default function AddPrayerModal({ isOpen, onClose, seed }) {
       return;
     }
 
+    const prayerData = {
+      title: title.trim(),
+      description: description.trim(),
+      scripture: scripture.trim(),
+      category,
+    };
+
     setIsSaving(true);
+
+
     try {
-      await createPrayer({
-        title: title.trim(),
-        description: description.trim(),
-        scripture: scripture.trim(),
-      });
+      if (onSubmit) {
+        await onSubmit(prayerData);
+      } else {
+        await createPrayer(prayerData);
+      }
 
       onClose();
     } catch (err) {
@@ -51,7 +75,7 @@ export default function AddPrayerModal({ isOpen, onClose, seed }) {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Add a Prayer"
+      title={mode === "edit" ? "Edit Prayer" : "Add a Prayer"}
       size="md"
       footer={
         <>
@@ -70,7 +94,11 @@ export default function AddPrayerModal({ isOpen, onClose, seed }) {
             form="add-prayer-form"
             disabled={isSaving}
           >
-            {isSaving ? "Saving..." : "Save Prayer"}
+            {isSaving
+             ? "Saving..."
+             : mode === "edit"
+             ? "Save Changes"
+             : "Save Prayer"}
           </button>
         </>
       }
@@ -83,6 +111,19 @@ export default function AddPrayerModal({ isOpen, onClose, seed }) {
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. Peace in my heart"
         />
+
+        <label className="add-prayer__label"> Prayer Theme</label>
+        <select
+        className="add-prayer__input"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        >
+          {CATEGORY_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
 
         <label className="add-prayer__label">Scripture (optional)</label>
         <input
