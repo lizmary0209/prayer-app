@@ -9,6 +9,7 @@ import FloatingPrayButton from "./components/FloatingPrayButton/FloatingPrayButt
 import LoginModal from "./components/LoginModal/LoginModal";
 import RegisterModal from "./components/RegisterModal/RegisterModal";
 import Profile from "./pages/Profile/Profile";
+import SalvationModal from "./components/SalvationModal/SalvationModal";
 
 import { getMe } from "./utils/api";
 
@@ -20,6 +21,8 @@ const [prayerSeed, setPrayerSeed] = useState(null);
 const [isLoginOpen, setIsLoginOpen] = useState(false);
 const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 const [cardsRefreshToken, setCardsRefreshToken] = useState(0);
+const [isSalvationOpen, setIsSalvationOpen] = useState(false);
+const [salvationCount, setSalvationCount] = useState(0);
 
 
   function openPrayerModal(seed = null) {
@@ -46,6 +49,19 @@ const [cardsRefreshToken, setCardsRefreshToken] = useState(0);
 
   function closeRegisterModal() {
     setIsRegisterOpen(false);
+  }
+
+  function handleOpenSalvationModal() {
+    setIsSalvationOpen(true);
+  }
+
+  function handleCloseSalvationModal() {
+    setIsSalvationOpen(false);
+  }
+
+  function handleSalvationConfirm() {
+    setSalvationCount((prevCount) => prevCount + 1);
+    setIsSalvationOpen(false);
   }
 
 
@@ -84,6 +100,7 @@ const [cardsRefreshToken, setCardsRefreshToken] = useState(0);
       if (!isLoggedIn) return openLoginModal();
      openPrayerModal(null);
     }}
+    onOpenSalvation={handleOpenSalvationModal}
     onLogout={handleLogout}
     />
 
@@ -156,6 +173,12 @@ const [cardsRefreshToken, setCardsRefreshToken] = useState(0);
             closeRegisterModal();
             openLoginModal();
             }}
+            />
+
+            <SalvationModal
+            isOpen={isSalvationOpen}
+            onClose={handleCloseSalvationModal}
+            onConfirm={handleSalvationConfirm}
             />
 </>
   );

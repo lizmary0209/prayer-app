@@ -65,3 +65,9 @@ export function updateMe(payload) {
 export function getMyPrayers() {
     return request("/api/users/me/prayers");
 }
+
+export function recordSalvation() {
+    return request("/api/users/me/salvation", {
+        method: "POST",
+    });
+}

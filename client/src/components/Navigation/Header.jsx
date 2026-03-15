@@ -9,6 +9,7 @@ export default function Header({
   onOpenLogin,
   onOpenRegister,
   onOpenAddPrayer,
+  onOpenSalvation,
   onLogout,
 }) {
   const avatarSrc =
@@ -62,6 +63,14 @@ export default function Header({
                 onClick={onOpenAddPrayer}
               >
                 New Prayer
+              </button>
+
+              <button
+              className="btn btn--ghost"
+              type="button"
+              onClick={onOpenSalvation}
+              >
+                Salvation Prayer
               </button>
 
               <div className="header__profile">

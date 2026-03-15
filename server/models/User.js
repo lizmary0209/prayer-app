@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema(
     password: { type: String, required: true, minlength: 6, maxlength: 50, select: false },
     displayName: { type: String, required: true, trim: true, minlength: 2, maxlength: 30 },
     profilePic: { type: String, default: "", trim: true },
+    salvationDate: { type: Date, default: null},
   },
   { timestamps: true }
 );

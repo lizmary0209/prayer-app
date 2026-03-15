@@ -1,40 +1,400 @@
 .profile {
-    padding: 24px;
+  min-height: 100vh;
+  background: #edf3ee;
+  padding: 32px 24px 64px;
+  color: #244232;
+}
+
+.profile__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #cfd8cc;
+  background: #f8fbf7;
+  color: #244232;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  margin-bottom: 28px;
+}
+
+.profile__back:hover {
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(36, 66, 50, 0.08);
+  transform: translateY(-1px);
+}
+
+.profile__hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.profile__hero--signedOut {
+  display: block;
+}
+
+.profile__eyebrow {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #55705e;
 }
 
 .profile__title {
-    margin: 0 0 16px;
+  margin: 0;
+  font-size: clamp(2.5rem, 4vw, 4.25rem);
+  line-height: 0.95;
+  color: #163824;
+}
+
+.profile__subtitle {
+  max-width: 720px;
+  margin: 14px 0 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: #597062;
+}
+
+.profile__editBtn {
+  border: 1px solid #d8cfa8;
+  background: #f5efda;
+  color: #355846;
+  border-radius: 999px;
+  padding: 13px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.profile__editBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(53, 88, 70, 0.1);
+  background: #f8f2df;
+}
+
+.profile__topGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 24px;
+  margin-bottom: 24px;
 }
 
 .profile__card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px;
-    border-radius: 14px;
-    background: rgba(0, 0, 0, 0.04);
-    max-width: 520px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(200, 212, 202, 0.95);
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 18px 45px rgba(35, 62, 47, 0.07);
+  backdrop-filter: blur(4px);
+}
+
+.profile__card--identity {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile__card--salvation {
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(246, 250, 246, 0.92));
+}
+
+.profile__cardAccent {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(90deg, #d7e7dd 0%, #f2ead1 50%, #dce8f0 100%);
 }
 
 .profile__avatar {
-    width: 56px;
-    height: 56px;
-    border-radius: 999px;
-    object-fit: cover;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 24px rgba(36, 66, 50, 0.12);
+  flex-shrink: 0;
+}
+
+.profile__identityText {
+  min-width: 0;
+}
+
+.profile__label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6a7f71;
 }
 
 .profile__name {
-    margin: 0;
-    font-weight: 700;
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.05;
+  color: #193926;
 }
 
 .profile__email {
-    margin: 4px 0 0;
-    opacity: 0.8;
+  margin: 10px 0 0;
+  font-size: 1.05rem;
+  color: #667b6e;
+  word-break: break-word;
 }
 
-.profile__note {
-    margin-top: 16px;
-    opacity: 0.85;
+.profile__salvationDate {
+  margin: 0;
+  font-size: 1.7rem;
+  line-height: 1.25;
+  color: #1c3e2a;
+}
+
+.profile__salvationDate--empty {
+  color: #51685a;
+}
+
+.profile__salvationText {
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #607668;
+  max-width: 40ch;
+}
+
+.profile__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 34px;
+}
+
+.profile__statCard {
+  background: #f9fbf8;
+  border: 1px solid #dbe5db;
+  border-radius: 22px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile__statLabel {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #66806f;
+}
+
+.profile__statValue {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f402d;
+}
+
+.profile__section {
+  margin-top: 12px;
+}
+
+.profile__sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.profile__sectionTitle {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1;
+  color: #173824;
+}
+
+.profile__muted {
+  color: #667b6e;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.profile__error {
+  margin: 12px 0 0;
+  color: #a03d3d;
+  font-weight: 600;
+}
+
+.profile__signedout {
+  color: #667b6e;
+  font-size: 16px;
+}
+
+.profile__emptyState {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px dashed #cad7cb;
+  border-radius: 24px;
+  padding: 28px;
+}
+
+.profile__emptyTitle {
+  margin: 0 0 10px;
+  font-size: 1.35rem;
+  color: #244232;
+}
+
+.profile__prayerGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 20px;
+}
+
+.profile__prayerCard {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fcfdfb 0%, #f4f8f3 100%);
+  border: 1px solid #d6e0d5;
+  border-radius: 28px;
+  box-shadow: 0 14px 36px rgba(35, 62, 47, 0.06);
+}
+
+.profile__prayerAccent {
+  height: 74px;
+  background:
+    linear-gradient(135deg, rgba(213, 230, 220, 0.9), rgba(243, 236, 215, 0.72) 55%, rgba(225, 236, 244, 0.8));
+  border-bottom: 1px solid rgba(207, 218, 207, 0.85);
+}
+
+.profile__prayerContent {
+  padding: 22px 22px 24px;
+}
+
+.profile__prayerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.profile__prayerMeta {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6c8475;
+}
+
+.profile__prayerTitle {
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 1.15;
+  color: #1b3a28;
+}
+
+.profile__prayerDesc {
+  margin: 16px 0 0;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #55705f;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.profile__prayerDesc--muted {
+  color: #7b9083;
+  font-style: italic;
+}
+
+.profile__prayerEditBtn {
+  border: 1px solid #d8cfa8;
+  background: #fffaf0;
+  color: #355846;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.profile__prayerEditBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(53, 88, 70, 0.08);
+  background: #fffdf6;
+}
+
+@media (max-width: 980px) {
+  .profile__topGrid,
+  .profile__prayerGrid,
+  .profile__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .profile__hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .profile {
+    padding: 20px 16px 40px;
+  }
+
+  .profile__card {
+    padding: 22px;
+    border-radius: 24px;
+  }
+
+  .profile__card--identity {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile__avatar {
+    width: 78px;
+    height: 78px;
+  }
+
+  .profile__title {
+    font-size: 2.5rem;
+  }
+
+  .profile__sectionTitle {
+    font-size: 2rem;
+  }
+
+  .profile__prayerTop {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile__prayerEditBtn,
+  .profile__editBtn,
+  .profile__back {
+    width: 100%;
+    justify-content: center;
+  }
 }
