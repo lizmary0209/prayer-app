@@ -66,8 +66,9 @@ export function getMyPrayers() {
     return request("/api/users/me/prayers");
 }
 
-export function recordSalvation() {
+export function recordSalvation(payload) {
     return request("/api/users/me/salvation", {
-        method: "POST",
+        method: "PATCH",
+        body: JSON.stringify(payload),
     });
 }

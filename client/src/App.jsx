@@ -22,7 +22,6 @@ const [isLoginOpen, setIsLoginOpen] = useState(false);
 const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 const [cardsRefreshToken, setCardsRefreshToken] = useState(0);
 const [isSalvationOpen, setIsSalvationOpen] = useState(false);
-const [salvationCount, setSalvationCount] = useState(0);
 
 
   function openPrayerModal(seed = null) {
@@ -59,9 +58,16 @@ const [salvationCount, setSalvationCount] = useState(0);
     setIsSalvationOpen(false);
   }
 
-  function handleSalvationConfirm() {
+  function handleSalvationSuccess(data) {
+if (data?.user) {
+  setCurrentUser(data.user);
+
+  if (data.user.salvationStatus === "saved_today") {
     setSalvationCount((prevCount) => prevCount + 1);
-    setIsSalvationOpen(false);
+  }
+}
+
+setIsSalvationOpen(false);
   }
 
 
@@ -178,7 +184,7 @@ const [salvationCount, setSalvationCount] = useState(0);
             <SalvationModal
             isOpen={isSalvationOpen}
             onClose={handleCloseSalvationModal}
-            onConfirm={handleSalvationConfirm}
+            onSuccess={handleSalvationSuccess}
             />
 </>
   );
