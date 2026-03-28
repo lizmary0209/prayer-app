@@ -80,6 +80,24 @@ setIsSalvationOpen(false);
   }
 
   useEffect(() => {
+    function handleEsc(e) {
+      if (e.key === "Escape") {
+        setIsPrayerOpen(false);
+        setPrayerSeed(null);
+        setIsLoginOpen(false);
+        setIsRegisterOpen(false);
+        setIsSalvationOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleEsc);
+
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, []);
+
+  useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (!token) return;
 

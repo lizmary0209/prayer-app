@@ -51,6 +51,13 @@ export function createPrayer(payload) {
     });
 }
 
+export async function updatePrayer(id, payload) {
+    return request(`/api/prayers/${id}`,  {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+    });
+}
+
 export function getMe() {
     return request("/api/users/me");
 }
