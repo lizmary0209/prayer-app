@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { request } from "../../utils/api";
+import { request, getSalvationCount } from "../../utils/api";
 import "./Cards.css";
 
 import AddPrayerModal from "../../components/AddPrayerModal/AddPrayerModal";
@@ -113,6 +113,7 @@ function Cards({ currentUser, refreshToken }) {
   const [openCardId, setOpenCardId] = useState(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [salvationCount, setSalvationCount] = useState(0);
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -131,6 +132,19 @@ function Cards({ currentUser, refreshToken }) {
 
     fetchCards();
   }, [refreshToken]);
+
+  useEffect(() => {
+    const fetchSalvationCount = async () => {
+      try {
+        const data = await getSalvationCount();
+        setSalvationCount(data.count || 0);
+      } catch (err) {
+        console.error("Failed to fetch salvation count:", err);
+      }
+    };
+
+    fetchSalvationCount();
+  }, []);
 
   const toggleCardSlide = (id) => {
     setOpenCardId((prev) => (prev === id ? null : id));
@@ -291,6 +305,12 @@ const handleEditClick = (card) => {
   return (
     <main className="cards">
       <h1 className="cards__title">Encouragement Cards</h1>
+      <div className="cards__salvation-counter">
+        <span className="cards__salvation-number">{salvationCount}</span>
+        <span className="cards__salvation-text">
+          souls have given their lives to Christ
+        </span>
+      </div>
 
       {loading && <p className="cards__muted">Loading cards...</p>}
       {error && <p className="cards__error">{error}</p>}
