@@ -10,6 +10,7 @@ import LoginModal from "./components/LoginModal/LoginModal";
 import RegisterModal from "./components/RegisterModal/RegisterModal";
 import Profile from "./pages/Profile/Profile";
 import SalvationModal from "./components/SalvationModal/SalvationModal";
+import Home from "./pages/Home/Home";
 
 import { getMe } from "./utils/api";
 
@@ -129,29 +130,25 @@ setIsSalvationOpen(false);
     />
 
 
-    <Routes>
-      <Route path="/" 
-      element={
-      <Cards currentUser={currentUser}
-      refreshToken={cardsRefreshToken}
-      />} 
-      />
+<Routes>
+  <Route path="/" element={<Home />} />
 
-      <Route
-      path="cards"
-      element={<Navigate to="/" replace />}
-      />
+  <Route
+    path="/cards"
+    element={<Cards currentUser={currentUser} />}
+  />
 
-
-      <Route path="/profile"
-       element={
-       <Profile
+  <Route
+    path="/profile"
+    element={
+      <Profile
         currentUser={currentUser}
         onUserUpdate={(user) => setCurrentUser(user)}
-        />
-        }
-         />
-   </Routes>
+      />
+    }
+  />
+</Routes>
+
 
     <FloatingPrayButton onClick={() => {
       if (!isLoggedIn) return openLoginModal();
