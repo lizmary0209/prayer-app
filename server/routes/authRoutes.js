@@ -11,7 +11,6 @@ router.post("/signup", async (req, res) => {
 
     const normalizedEmail = String(email || "").trim().toLowerCase();
 
-    // basic guard (nice errors instead of random 500s)
     if (!normalizedEmail || !password || !displayName) {
       return res.status(400).json({ message: "Missing required fields" });
     }
@@ -28,7 +27,6 @@ router.post("/signup", async (req, res) => {
       profilePic,
     });
 
-    // Minimal payload
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
@@ -46,7 +44,6 @@ router.post("/signup", async (req, res) => {
   } catch (error) {
     console.error("SIGNUP ERROR:", error);
 
-    // TEMP DEBUG RESPONSE (remove later)
     return res.status(500).json({
       name: error.name,
       message: error.message,
@@ -96,7 +93,6 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     console.error("LOGIN ERROR:", error);
 
-    // TEMP DEBUG RESPONSE (remove later)
     return res.status(500).json({
       name: error.name,
       message: error.message,

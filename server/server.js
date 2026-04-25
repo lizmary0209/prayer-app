@@ -8,6 +8,7 @@ const prayerRoutes = require("./routes/prayerRoutes");
 const userRoutes = require("./routes/userRoutes");
 const devRoutes = require("./routes/devRoutes");
 const scriptureRoutes = require("./routes/scriptureRoutes");
+const salvationRoutes = require("./routes/salvation");
 
 const app = express();
 const PORT = 5000;
@@ -25,6 +26,7 @@ app.use("/api/prayers", prayerRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dev", devRoutes);
 app.use("/api/scripture", scriptureRoutes);
+app.use("/api/salvation", salvationRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

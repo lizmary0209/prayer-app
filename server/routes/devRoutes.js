@@ -4,12 +4,15 @@ const Prayer = require("../models/Prayer");
 
 router.post("/fix-prayer-scripture", async (req, res) => {
   try {
-    const prayers = await Prayer.find({ scripture: "$scripture" }, { _id: 1 });
+    const prayers = await Prayer.find(
+      { scripture: "$scripture" },
+      { _id: 1, scripture: 1 }
+    );
 
     let fixed = 0;
 
     for (const prayer of prayers) {
-      if (prayer.reference === "$scripture") {
+      if (prayer.scripture === "$scripture") {
         await Prayer.updateOne(
           { _id: prayer._id },
           { $set: { scripture: "Isaiah 41:10" } }
@@ -58,7 +61,6 @@ router.post("/seed-prayers", async (req, res) => {
 
     const result = await Prayer.bulkWrite(ops);
 
-    
     res.json({ message: "Seed complete", result });
   } catch (err) {
     console.error(err);
@@ -67,5 +69,4 @@ router.post("/seed-prayers", async (req, res) => {
 });
 
 module.exports = router;
-
 

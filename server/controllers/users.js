@@ -87,38 +87,35 @@ const recordSalvation = async (req, res) => {
         if (salvationTestimony !== undefined) {
             user.salvationTestimony = salvationTestimony;
         }
+if (salvationStatus === "saved_today") {
+  user.salvationDate = new Date();
+  user.salvationDateEstimated = false;
 
-        if (salvationStatus === "saved_today") {
-            user.salvationDate = new Date();
-            user.salvationDateEstimated = false;
+  if (!user.countedInSalvationCounter) {
+    user.countedInSalvationCounter = true;
+  }
 
-            if (!user.countedInSalvationCounter) {
-                user.countedInSalvationCounter = true;
+  await user.save();
 
-                   // TODO:
-        // Increment your global salvation counter here
-            }
+  return res.status(200).json({
+    message: "Welcome to the family of God. Your salvation has been recorded.",
+    user,
+  });
+}
 
-            await user.save();
+        if (salvationStatus === "already_saved") {
+  user.salvationDate = salvationDate ? new Date(salvationDate) : null;
+  user.salvationDateEstimated = Boolean(salvationDateEstimated);
 
-            return res.status(200).json({
-                message: "Welcome to the family of God. Your salvation has been recorded.",
-                user,
-            });
-        }
+  user.countedInSalvationCounter = Boolean(salvationDate);
 
-         if (salvationStatus === "already_saved") {
-        user.salvationDate = salvationDate ? new Date(salvationDate) : null;
-        user.salvationDateEstimated = Boolean(salvationDateEstimated);
-        user.countedInSalvationCounter = false;
+  await user.save();
 
-        await user.save();
-
-        return res.status(200).json({
-            message: "Your salvation journey has been saved to your profile.",
-            user,
-        });
-    }
+  return res.status(200).json({
+    message: "Your salvation journey has been saved to your profile.",
+    user,
+  });
+}
 
 
     if (salvationStatus === "exploring") {
