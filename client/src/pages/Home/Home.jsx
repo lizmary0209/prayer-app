@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { getSalvationCount } from "../../utils/api";
+import Counter from "../../components/Counter/Counter";
 import "./Home.css";
 
-function Home() {
+function Home({ salvationCount, setSalvationCount }) {
     const [count, setCount] = useState(0);
 
     useEffect(() => {
@@ -10,6 +11,7 @@ function Home() {
             try {
                 const data = await getSalvationCount();
                 setCount(data.count || 0);
+                setSalvationCount?.(data.count || 0);
             } catch (err) {
                 console.error(err);
             }
@@ -30,9 +32,13 @@ function Home() {
                 </p>
 
                 <div className="home__counter">
-                    <span className="home__count">{count}</span>
+                    <Counter 
+                    value={salvationCount ?? count}
+                     event={salvationEvent}
+                      setEvent={setSalvationEvent}
+                       />
                     <span className="home__text">
-                        souls have given their lives to Christ
+                        people have chosen to follow Jesus
                     </span>
                 </div>
 

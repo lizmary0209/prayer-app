@@ -23,6 +23,8 @@ const [isLoginOpen, setIsLoginOpen] = useState(false);
 const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 const [cardsRefreshToken, setCardsRefreshToken] = useState(0);
 const [isSalvationOpen, setIsSalvationOpen] = useState(false);
+const [salvationCount, setSalvationCount] = useState(0);
+const [salvationEvent, setSalvationEvent] = useState(false);
 
 
   function openPrayerModal(seed = null) {
@@ -59,17 +61,29 @@ const [isSalvationOpen, setIsSalvationOpen] = useState(false);
     setIsSalvationOpen(false);
   }
 
-  function handleSalvationSuccess(data) {
-if (data?.user) {
-  setCurrentUser(data.user);
+import { getSalvationCount } from "./utils/api";
 
-  if (data.user.salvationStatus === "saved_today") {
-    setSalvationCount((prevCount) => prevCount + 1);
+async function handleSalvationSuccess(data) {
+  if (data?.user) {
+    setCurrentUser(data.user);
+
+    if (data.user.salvationStatus === "saved_today") {
+      setSalvationEvent(true);
+
+      try {
+        const res = await getSalvationCount();
+        setSalvationCount(res.count || 0);
+      } catch (err) {
+        console.error("Failed to refresh salvation count", err);
+
+
+        setSalvationCount((prev) => prev + 1);
+      }
+    }
   }
+
+  setIsSalvationOpen(false);
 }
-
-setIsSalvationOpen(false);
-  }
 
 
   function handleLogout() {
@@ -131,7 +145,12 @@ setIsSalvationOpen(false);
 
 
 <Routes>
-  <Route path="/" element={<Home />} />
+  <Route path="/" element={<Home
+  salvationCount={salvationCount}
+  setSalvationCount={setSalvationCount}
+  salvationEvent={salvationEvent}
+  setSalvationEvent={setSalvationEvent}
+  />} />
 
   <Route
     path="/cards"

@@ -1,69 +1,178 @@
 .home {
-    min-height: 100vh;
-    background: url("../../assets/SelahTree.png") center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    color: #fff;
-    text-align: center;
+  min-height: calc(100vh - 96px);
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(255, 248, 232, 0.05),
+      rgba(31, 46, 28, 0.18)
+    ),
+    url("../../assets/SelahTree.png");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-color: #d7dfce;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  padding: 0 24px 56px;
+  overflow: hidden;
 }
 
 .home__overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 30, 18, 0.08);
 }
 
 .home__content {
-    position: relative;
-    z-index: 1;
-    max-width: 600px;
-    padding: 20px;
+  position: relative;
+  z-index: 1;
+  width: min(720px, 100%);
+  padding: 28px 30px;
+  border-radius: 32px;
+
+  background: rgba(30, 43, 26, 0.34);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  border: 1px solid rgba(255, 250, 240, 0.24);
+  box-shadow: 0 22px 70px rgba(20, 28, 16, 0.22);
 }
 
 .home__title {
-    font-size: 3rem;
-    margin-bottom: 10px;
+  font-size: clamp(3.3rem, 7vw, 5.6rem);
+  line-height: 0.95;
+  margin: 0 0 12px;
+  color: #fff8ec;
+  text-shadow: 0 5px 22px rgba(0, 0, 0, 0.38);
 }
 
 .home__subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    opacity: 0.9;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  margin: 0 0 22px;
+  color: #fff4dc;
+  text-shadow: 0 3px 16px rgba(0, 0, 0, 0.38);
 }
 
 .home__counter {
-    margin-bottom: 30px;
+  width: fit-content;
+  min-width: 360px;
+  margin: 0 auto 22px;
+  padding: 16px 28px;
+  border-radius: 24px;
+  background: rgba(255, 250, 240, 0.18);
+  border: 1px solid rgba(255, 250, 240, 0.28);
 }
 
 .home__count {
-    display: block;
-    font-size: 2.5rem;
-    font-weight: bold;
+  display: block;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #fff8ec;
+  transition: transform 0.2s ease;
 }
 
+.home__count.bump {
+  transform: scale(1.06);
+}
+
+.home__count.glow {
+  text-shadow:
+    0 0 10px rgba(255, 240, 200, 0.55),
+    0 0 22px rgba(255, 220, 150, 0.4),
+    0 0 40px rgba(255, 210, 120, 0.25);
+}
+
+.home__count.event {
+  text-shadow:
+  0 0 14px rgba(255, 240, 200, 0.85),
+  0 0 30px rgba(255, 220, 150, 0.65),
+  0 0 65px rgba(255, 210, 120, 0.45);
+}
+
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 0 rgba(255, 240, 200, 0);
+  }
+  40% {
+    text-shadow:
+    0 0 10px rgba(255, 240, 200, 0.5),
+    0 0 22px rgba(255, 220, 150, 0.4),
+    0 0 35px rgba(255, 210, 120, 0.25);
+  }
+  100% {
+    text-shadow: 0 0 0 rgba(255, 240, 200, 0);
+  }
+}
+
+
 .home__text {
-    font-size: 1rem;
-    opacity: 0.85;
+  font-size: 1rem;
+  color: #fff1d3;
+  opacity: 1;
 }
 
 .home__actions {
-    dispaly: flex;
-    gap: 12px;
-    justify-content: center;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .home__btn {
-    padding: 10px 18px;
-    border-radius: 8px;
-    border: none;
-    backround: #4f6f52;
-    color: white;
-    cursor: pointer;
+  padding: 13px 24px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #9c7434, #c0964d);
+  color: #fffaf0;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(42, 32, 18, 0.28);
+  transition: all 0.25s ease;
 }
 
+
+.home__btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 32px rgba(42, 32, 18, 0.35);
+  filter: brightness(1.08);
+}
+
+
+.home__btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 6px 14px rgba(42, 32, 18, 0.25);
+}
+
+
 .home__btn--secondary {
-    background: transparent;
-    border: 1px solid white;
+  background: rgba(255, 250, 240, 0.94);
+  color: #2f4329;
+  border: 1px solid rgba(255, 250, 240, 0.75);
+  transition: all 0.25s ease;
+}
+
+
+.home__btn--secondary:hover {
+  background: #fffaf0;
+  color: #1f2e1c;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+}
+
+
+@media (max-width: 768px) {
+  .home {
+    background-size: contain;
+    background-position: center top;
+    align-items: flex-end;
+    padding-bottom: 40px;
+  }
+
+  .home__content {
+    padding: 26px 20px;
+  }
 }
