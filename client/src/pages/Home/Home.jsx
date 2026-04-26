@@ -3,7 +3,14 @@ import { getSalvationCount } from "../../utils/api";
 import Counter from "../../components/Counter/Counter";
 import "./Home.css";
 
-function Home({ salvationCount, setSalvationCount }) {
+function Home({ 
+    salvationCount,
+     setSalvationCount,
+    salvationEvent,
+    setSalvationEvent,
+    }) {
+
+        
     const [count, setCount] = useState(0);
 
     useEffect(() => {

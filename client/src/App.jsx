@@ -12,7 +12,9 @@ import Profile from "./pages/Profile/Profile";
 import SalvationModal from "./components/SalvationModal/SalvationModal";
 import Home from "./pages/Home/Home";
 
-import { getMe } from "./utils/api";
+
+import { getMe, getSalvationCount } from "./utils/api";
+
 
 export default function App() {
 const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,8 +62,6 @@ const [salvationEvent, setSalvationEvent] = useState(false);
   function handleCloseSalvationModal() {
     setIsSalvationOpen(false);
   }
-
-import { getSalvationCount } from "./utils/api";
 
 async function handleSalvationSuccess(data) {
   if (data?.user) {
