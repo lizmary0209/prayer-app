@@ -5,7 +5,6 @@ import "./App.css";
 import Header from "./components/Navigation/Header";
 import Cards from "./pages/Cards/Cards";
 import AddPrayerModal from "./components/AddPrayerModal/AddPrayerModal";
-import FloatingPrayButton from "./components/FloatingPrayButton/FloatingPrayButton";
 import LoginModal from "./components/LoginModal/LoginModal";
 import RegisterModal from "./components/RegisterModal/RegisterModal";
 import Profile from "./pages/Profile/Profile";
@@ -168,12 +167,6 @@ async function handleSalvationSuccess(data) {
   />
 </Routes>
 
-
-    <FloatingPrayButton onClick={() => {
-      if (!isLoggedIn) return openLoginModal();
-      openPrayerModal(null);
-      }}
-       />
 
       <AddPrayerModal 
       isOpen={isPrayerOpen}
