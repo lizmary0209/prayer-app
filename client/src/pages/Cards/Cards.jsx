@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { request, getSalvationCount } from "../../utils/api";
 import "./Cards.css";
 
@@ -72,11 +73,21 @@ const CATEGORY_RULES = [
   },
 ];
 
+const PRAYER_CATEGORIES = [
+  "All Prayers",
+  "Healing",
+  "Family",
+  "Strength",
+  "Guidance",
+  "Gratitude",
+];
+
 function getCoverCategory(card) {
   if (card?.category) return card.category;
 
-  
-  const haystack = `${card?.title || ""} ${card?.scripture || ""} ${card?.description || ""}`.toLowerCase();
+  const haystack = `${card?.title || ""} ${card?.scripture || ""} ${
+    card?.description || ""
+  }`.toLowerCase();
 
   for (const rule of CATEGORY_RULES) {
     if (rule.keywords.some((k) => haystack.includes(k))) return rule.category;
@@ -98,7 +109,6 @@ function hashString(str) {
 function getNatureImage(card) {
   const category = getCoverCategory(card);
   const pool = COVER_POOLS[category] || COVER_POOLS.neutral;
-
   const seed = card?._id || card?.title || "selah";
   const idx = hashString(String(seed) + category) % pool.length;
 
@@ -114,6 +124,9 @@ function Cards({ currentUser, refreshToken }) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [salvationCount, setSalvationCount] = useState(0);
+  const [activeCategory, setActiveCategory] = useState(
+    localStorage.getItem("selahActiveCategory") || "All Prayers"
+  );
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -145,6 +158,28 @@ function Cards({ currentUser, refreshToken }) {
 
     fetchSalvationCount();
   }, []);
+
+  const getCategoryMatches = (category) => {
+    if (category === "All Prayers") return cards;
+
+    const searchTerm = category.toLowerCase();
+
+    return cards.filter((card) => {
+      const haystack = `${card.title || ""} ${card.description || ""} ${
+        card.scripture || ""
+      } ${card.category || ""}`.toLowerCase();
+
+      return haystack.includes(searchTerm);
+    });
+  };
+
+  const filteredCards = getCategoryMatches(activeCategory);
+
+  const handleCategoryClick = (category) => {
+    setActiveCategory(category);
+    localStorage.setItem("selahActiveCategory", category);
+    setOpenCardId(null);
+  };
 
   const toggleCardSlide = (id) => {
     setOpenCardId((prev) => (prev === id ? null : id));
@@ -253,19 +288,19 @@ function Cards({ currentUser, refreshToken }) {
     }
   };
 
-const handleEditClick = (card) => {
-  const currentUserId = currentUser?._id || currentUser?.id;
-  const ownerId = card.createdBy?._id || card.createdBy?.id;
-  const isOwner = ownerId === currentUserId;
+  const handleEditClick = (card) => {
+    const currentUserId = currentUser?._id || currentUser?.id;
+    const ownerId = card.createdBy?._id || card.createdBy?.id;
+    const isOwner = ownerId === currentUserId;
 
-  if (!isOwner) {
-    alert("You can only edit your own prayers.");
-    return;
-  }
+    if (!isOwner) {
+      alert("You can only edit your own prayers.");
+      return;
+    }
 
-  setSelectedCard(card);
-  setIsEditOpen(true);
-};
+    setSelectedCard(card);
+    setIsEditOpen(true);
+  };
 
   const handleCloseEdit = () => {
     setIsEditOpen(false);
@@ -304,220 +339,270 @@ const handleEditClick = (card) => {
 
   return (
     <main className="cards">
-      <h1 className="cards__title">Encouragement Cards</h1>
-      <div className="cards__salvation-counter">
-        <span className="cards__salvation-number">{salvationCount}</span>
-        <span className="cards__salvation-text">
-          souls have given their lives to Christ
-        </span>
-      </div>
+      <section className="cards__header">
+        <Link to="/" className="cards__page-link cards__page-link--left">
+          ← Main Page
+        </Link>
+
+        <div className="cards__header-main">
+          <h1 className="cards__title">Prayer Wall</h1>
+          <p className="cards__subtitle">
+            A place to pause, pray, and stand in faith together
+          </p>
+        </div>
+
+        <Link to="/profile" className="cards__page-link cards__page-link--right">
+          Your Profile →
+        </Link>
+
+        <div className="cards__counter">
+          <span className="cards__counter-number">{salvationCount}</span>
+          <span className="cards__counter-text">
+            souls have given their lives to Christ
+          </span>
+        </div>
+      </section>
 
       {loading && <p className="cards__muted">Loading cards...</p>}
       {error && <p className="cards__error">{error}</p>}
-      {!loading && !error && cards.length === 0 && (
-        <p className="cards__muted">No cards yet.</p>
-      )}
 
-      <ul className="cards__list">
-       {cards.map((card) => {
-  const ref = card.scripture;
-  const v = verseState[card._id] || {};
-  const verseBtnLabel = v.isOpen ? "Hide Verse" : "View Verse";
-  const likesCount = card.likes?.length || 0;
-  const prayedCount = card.prayedCount || 0;
-  const isOpen = openCardId === card._id;
-  const currentUserId = currentUser?._id || currentUser?.id;
-  const ownerId = card.createdBy?._id || card.createdBy?.id;
-  const isOwner = ownerId === currentUserId;
+      <section className="cards__layout">
+        <aside className="categories">
+          <h3>Categories</h3>
+          <ul>
+            {PRAYER_CATEGORIES.map((category) => {
+              const count = getCategoryMatches(category).length;
 
-  console.log("CARD DEBUG:", {
-  title: card.title,
-  category: card.category,
-  imageCategory: getCoverCategory(card),
-});
+              return (
+                <li key={category}>
+                  <button
+                    className={`categories__btn ${
+                      activeCategory === category ? "categories__btn--active" : ""
+                    }`}
+                    type="button"
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    {category}{" "}
+                    <span className="categories__count">({count})</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </aside>
 
-          return (
-            <li
-              className={`cards__item ${isOpen ? "cards__item--open" : ""}`}
-              key={card._id}
-              onClick={() => toggleCardSlide(card._id)}
-              role="button"
-              tabIndex={0}
-              aria-expanded={isOpen}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  toggleCardSlide(card._id);
-                }
-              }}
-            >
-              <div className="cards__track">
-                <div className="cards__panel cards__panel--front">
-                  <div
-                    className="cards__cover"
-                    style={{ backgroundImage: `url(${getNatureImage(card)})` }}
-                    aria-hidden="true"
-                  />
-                  <div className="cards__overlay" aria-hidden="true" />
+        <section className="feed">
+          {!loading && !error && filteredCards.length === 0 && (
+            <div className="cards__empty">
+              <h3>No {activeCategory.toLowerCase()} prayers yet</h3>
+              <p>Be the first to share a prayer in this category.</p>
+            </div>
+          )}
 
-                  <div className="cards__content">
-                    <div className="cards__top">
-                      <div>
-                        <h3 className="cards__item-title">{card.title}</h3>
+          <ul className="cards__list">
+            {filteredCards.map((card) => {
+              const ref = card.scripture;
+              const v = verseState[card._id] || {};
+              const verseBtnLabel = v.isOpen ? "Hide Verse" : "View Verse";
+              const likesCount = card.likes?.length || 0;
+              const prayedCount = card.prayedCount || 0;
+              const isOpen = openCardId === card._id;
+              const currentUserId = currentUser?._id || currentUser?.id;
+              const ownerId = card.createdBy?._id || card.createdBy?.id;
+              const isOwner = ownerId === currentUserId;
+
+              return (
+                <li
+                  className={`cards__item ${isOpen ? "cards__item--open" : ""}`}
+                  key={card._id}
+                  onClick={() => toggleCardSlide(card._id)}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={isOpen}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      toggleCardSlide(card._id);
+                    }
+                  }}
+                >
+                  <div className="cards__track">
+                    <div className="cards__panel cards__panel--front">
+                      <div
+                        className="cards__cover"
+                        style={{ backgroundImage: `url(${getNatureImage(card)})` }}
+                        aria-hidden="true"
+                      />
+                      <div className="cards__overlay" aria-hidden="true" />
+
+                      <div className="cards__content">
+                        <div className="cards__top">
+                          <div>
+                            <h3 className="cards__item-title">{card.title}</h3>
+                          </div>
+
+                          <button
+                            className="cards__btn"
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleVerse(card);
+                            }}
+                            disabled={!ref}
+                          >
+                            {verseBtnLabel}
+                          </button>
+                        </div>
+
+                        <div className="cards__actions">
+                          <button
+                            className="cards__btn"
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleLike(card._id);
+                            }}
+                          >
+                            Like
+                          </button>
+
+                          <button
+                            className="cards__btn cards__btn--pray"
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePray(card._id);
+                            }}
+                          >
+                            Pray on this
+                          </button>
+
+                          {isOwner && (
+                            <button
+                              className="cards__btn"
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEditClick(card);
+                              }}
+                            >
+                              Edit
+                            </button>
+                          )}
+
+                          <span className="cards__likes">
+                            {likesCount} like{likesCount === 1 ? "" : "s"} •{" "}
+                            {prayedCount} prayer
+                            {prayedCount === 1 ? "" : "s"}
+                          </span>
+                        </div>
+
+                        <div className="cards__hint">
+                          {isOpen ? "Tap to go back" : "Tap to read"}
+                        </div>
                       </div>
-
-                      <button
-                        className="cards__btn"
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleVerse(card);
-                        }}
-                        disabled={!ref}
-                      >
-                        {verseBtnLabel}
-                      </button>
                     </div>
 
-                    <div className="cards__actions">
-                      <button
-                        className="cards__btn"
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleLike(card._id);
-                        }}
-                      >
-                        Like
-                      </button>
+                    <div className="cards__panel cards__panel--back">
+                      <div className="cards__content">
+                        <div className="cards__top">
+                          <div>
+                            <h3 className="cards__item-title">{card.title}</h3>
+                            <p className="cards__ref">{ref}</p>
+                          </div>
 
-                      <button
-                        className="cards__btn cards__btn--pray"
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handlePray(card._id);
-                        }}
-                      >
-                        Pray on this
-                      </button>
+                          <button
+                            className="cards__btn"
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleVerse(card);
+                            }}
+                            disabled={!ref}
+                          >
+                            {verseBtnLabel}
+                          </button>
+                        </div>
 
-                      {isOwner && (
-                        <button
-                          className="cards__btn"
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEditClick(card);
-                          }}
-                        >
-                          Edit
-                        </button>
-                      )}
+                        {card.description && (
+                          <p className="cards__msg">{card.description}</p>
+                        )}
 
-                      <span className="cards__likes">
-                        {likesCount} like{likesCount === 1 ? "" : "s"} •{" "}
-                        {prayedCount} prayer{prayedCount === 1 ? "" : "s"}
-                      </span>
-                    </div>
+                        <div className="cards__verse">
+                          {v.loading && (
+                            <p className="cards__muted">Loading verse...</p>
+                          )}
+                          {v.error && <p className="cards__error">{v.error}</p>}
 
-                    <div className="cards__hint">
-                      {isOpen ? "Tap to go back" : "Tap to read"}
+                          {!v.loading && !v.error && v.text && (
+                            <>
+                              <p className="cards__verse-text">{v.text}</p>
+                              <p className="cards__muted">
+                                {v.reference}
+                                {v.translation ? ` • ${v.translation}` : ""}
+                              </p>
+                            </>
+                          )}
+
+                          {!v.loading && !v.error && !v.text && (
+                            <p className="cards__muted">
+                              Tap “View Verse” to load scripture.
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="cards__actions">
+                          <button
+                            className="cards__btn"
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleLike(card._id);
+                            }}
+                          >
+                            Like
+                          </button>
+
+                          <button
+                            className="cards__btn cards__btn--pray"
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePray(card._id);
+                            }}
+                          >
+                            Pray on this
+                          </button>
+
+                          {isOwner && (
+                            <button
+                              className="cards__btn"
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEditClick(card);
+                              }}
+                            >
+                              Edit
+                            </button>
+                          )}
+
+                          <span className="cards__likes">
+                            {likesCount} like{likesCount === 1 ? "" : "s"} •{" "}
+                            {prayedCount} prayer
+                            {prayedCount === 1 ? "" : "s"}
+                          </span>
+                        </div>
+
+                        <div className="cards__hint">Tap to go back</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="cards__panel cards__panel--back">
-                  <div className="cards__content">
-                    <div className="cards__top">
-                      <div>
-                        <h3 className="cards__item-title">{card.title}</h3>
-                        <p className="cards__ref">{ref}</p>
-                      </div>
-
-                      <button
-                        className="cards__btn"
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleVerse(card);
-                        }}
-                        disabled={!ref}
-                      >
-                        {verseBtnLabel}
-                      </button>
-                    </div>
-
-                    {card.description && <p className="cards__msg">{card.description}</p>}
-
-                    <div className="cards__verse">
-                      {v.loading && <p className="cards__muted">Loading verse...</p>}
-                      {v.error && <p className="cards__error">{v.error}</p>}
-
-                      {!v.loading && !v.error && v.text && (
-                        <>
-                          <p className="cards__verse-text">{v.text}</p>
-                          <p className="cards__muted">
-                            {v.reference}
-                            {v.translation ? ` • ${v.translation}` : ""}
-                          </p>
-                        </>
-                      )}
-
-                      {!v.loading && !v.error && !v.text && (
-                        <p className="cards__muted">Tap “View Verse” to load scripture.</p>
-                      )}
-                    </div>
-
-                    <div className="cards__actions">
-                      <button
-                        className="cards__btn"
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleLike(card._id);
-                        }}
-                      >
-                        Like
-                      </button>
-
-                      <button
-                        className="cards__btn cards__btn--pray"
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handlePray(card._id);
-                        }}
-                      >
-                        Pray on this
-                      </button>
-
-                      {isOwner && (
-                        <button
-                          className="cards__btn"
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEditClick(card);
-                          }}
-                        >
-                          Edit
-                        </button>
-                      )}
-
-                      <span className="cards__likes">
-                        {likesCount} like{likesCount === 1 ? "" : "s"} •{" "}
-                        {prayedCount} prayer{prayedCount === 1 ? "" : "s"}
-                      </span>
-                    </div>
-
-                    <div className="cards__hint">Tap to go back</div>
-                  </div>
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      </section>
 
       {isEditOpen && selectedCard && (
         <AddPrayerModal
