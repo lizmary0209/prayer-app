@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getSalvationCount } from "../../utils/api";
 import Counter from "../../components/Counter/Counter";
 import "./Home.css";
 
 function Home({ 
+    isLoggedIn,
     salvationCount,
-     setSalvationCount,
+    setSalvationCount,
     salvationEvent,
     setSalvationEvent,
+    onOpenRegister,
     }) {
-
-        
-    const [count, setCount] = useState(0);
+        const navigate = useNavigate();
+        const [count, setCount] = useState(0);
 
     useEffect(() => {
         const fetchCount = async () => {
@@ -25,13 +27,17 @@ function Home({
         };
 
         fetchCount();
-    }, []);
+    }, [setSalvationCount]);
 
     return (
         <main className="home">
-            <div className="home__overlay" />
+            <section className="home__hero" aria-label="Selah home hero">
+            <div className="home__image-layer" />
 
             <section className="home__content">
+                <p className="home__eyebrow">Pause • Pray • Remember</p>
+
+
                 <h1 className="home__title">Selah</h1>
 
                 <p className="home__subtitle">
@@ -50,13 +56,37 @@ function Home({
                 </div>
 
                 <div className="home__actions">
-                    <button className="home__btn">Enter Prayer Space</button>
-                    <button className="home__btn home__btn--secondary">
+                    <button 
+                    className="home__btn"
+                    type="button"
+                    onClick={() => navigate("/cards")}
+                    >
+                        Enter Prayer Space
+                        </button>
+
+                        {!isLoggedIn && (
+                          <button
+                           className="home__btn home__btn--secondary"
+                           type="button"
+                           onClick={onOpenRegister}
+                           >
                         Create Account
                     </button>
-                </div>
+                        )}
+                  </div>
             </section>
-        </main>
+        </section>
+
+        <section className="home__intro">
+            <p className="home__intro-kicker">A prayer wall for real moments</p>
+            <h2 className="home__intro-title">
+                Share what is on your heart, or quietly stand with someone else in prayer. 
+            </h2>
+            <p className="home__intro-text">
+                Selah is being built as a peaceful space for prayer, encouragement, testimony, and reflection - a reminder that no prayer is too small and no person is forgotten. 
+            </p>
+        </section>
+    </main>
     );
 }
 

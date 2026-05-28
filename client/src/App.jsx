@@ -140,12 +140,18 @@ async function handleSalvationSuccess(data) {
 
 
 <Routes>
-  <Route path="/" element={<Home
+  <Route path="/"
+   element={
+   <Home
+   isLoggedIn={isLoggedIn}
   salvationCount={salvationCount}
   setSalvationCount={setSalvationCount}
   salvationEvent={salvationEvent}
   setSalvationEvent={setSalvationEvent}
-  />} />
+  onOpenRegister={openRegisterModal}
+  />
+  }
+ />
 
   <Route
     path="/cards"
