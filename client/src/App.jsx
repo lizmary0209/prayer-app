@@ -155,7 +155,12 @@ async function handleSalvationSuccess(data) {
 
   <Route
     path="/cards"
-    element={<Cards currentUser={currentUser} />}
+    element={
+    <Cards
+     currentUser={currentUser}
+     refreshToken={cardsRefreshToken}
+      />
+    }
   />
 
   <Route

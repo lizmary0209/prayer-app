@@ -74,12 +74,13 @@ const CATEGORY_RULES = [
 ];
 
 const PRAYER_CATEGORIES = [
-  "All Prayers",
-  "Healing",
-  "Family",
-  "Strength",
-  "Guidance",
-  "Gratitude",
+  { label: "All Prayers", value: "all" },
+  { label: "Hope & Joy", value: "sunrise" },
+  { label: "Peace & Rest", value: "water" },
+  { label: "Strength & Courage", value: "mountains" },
+  { label: "Healing & Comfort", value: "forest" },
+  { label: "Provision & Growth", value: "fields" },
+  { label: "Simple / Neutral", value: "neutral" },
 ];
 
 function getCoverCategory(card) {
@@ -125,7 +126,7 @@ function Cards({ currentUser, refreshToken }) {
   const [selectedCard, setSelectedCard] = useState(null);
   const [salvationCount, setSalvationCount] = useState(0);
   const [activeCategory, setActiveCategory] = useState(
-    localStorage.getItem("selahActiveCategory") || "All Prayers"
+    localStorage.getItem("selahActiveCategory") || "all"
   );
 
   useEffect(() => {
@@ -159,19 +160,11 @@ function Cards({ currentUser, refreshToken }) {
     fetchSalvationCount();
   }, []);
 
-  const getCategoryMatches = (category) => {
-    if (category === "All Prayers") return cards;
+const getCategoryMatches = (categoryValue) => {
+  if (categoryValue === "all") return cards;
 
-    const searchTerm = category.toLowerCase();
-
-    return cards.filter((card) => {
-      const haystack = `${card.title || ""} ${card.description || ""} ${
-        card.scripture || ""
-      } ${card.category || ""}`.toLowerCase();
-
-      return haystack.includes(searchTerm);
-    });
-  };
+  return cards.filter((card) => card.category === categoryValue);
+};
 
   const filteredCards = getCategoryMatches(activeCategory);
 
@@ -183,6 +176,11 @@ function Cards({ currentUser, refreshToken }) {
 
   const toggleCardSlide = (id) => {
     setOpenCardId((prev) => (prev === id ? null : id));
+  };
+
+  const handleViewVerseClick = async (card) => {
+    setOpenCardId(card._id);
+    await toggleVerse(card);
   };
 
   const toggleVerse = async (card) => {
@@ -371,18 +369,18 @@ function Cards({ currentUser, refreshToken }) {
           <h3>Categories</h3>
           <ul>
             {PRAYER_CATEGORIES.map((category) => {
-              const count = getCategoryMatches(category).length;
+              const count = getCategoryMatches(category.value).length;
 
               return (
-                <li key={category}>
+                <li key={category.value}>
                   <button
                     className={`categories__btn ${
-                      activeCategory === category ? "categories__btn--active" : ""
+                      activeCategory === category.value ? "categories__btn--active" : ""
                     }`}
                     type="button"
-                    onClick={() => handleCategoryClick(category)}
+                    onClick={() => handleCategoryClick(category.value)}
                   >
-                    {category}{" "}
+                   <span>{category.label}</span>
                     <span className="categories__count">({count})</span>
                   </button>
                 </li>
@@ -394,7 +392,11 @@ function Cards({ currentUser, refreshToken }) {
         <section className="feed">
           {!loading && !error && filteredCards.length === 0 && (
             <div className="cards__empty">
-              <h3>No {activeCategory.toLowerCase()} prayers yet</h3>
+              <h3 >
+                {activeCategory === "all"
+                ? "No prayers yet"
+              : `No ${activeCategoryLabel.toLowerCase()} prayers yet`}
+              </h3>
               <p>Be the first to share a prayer in this category.</p>
             </div>
           )}
@@ -410,6 +412,9 @@ function Cards({ currentUser, refreshToken }) {
               const currentUserId = currentUser?._id || currentUser?.id;
               const ownerId = card.createdBy?._id || card.createdBy?.id;
               const isOwner = ownerId === currentUserId;
+
+              const activeCategoryLabel = 
+              PRAYER_CATEGORIES.find((category) => category.value === activeCategory)?.label || "prayers";
 
               return (
                 <li
@@ -445,7 +450,7 @@ function Cards({ currentUser, refreshToken }) {
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
-                              toggleVerse(card);
+                              handleViewVerseClick(card);
                             }}
                             disabled={!ref}
                           >
@@ -515,7 +520,7 @@ function Cards({ currentUser, refreshToken }) {
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
-                              toggleVerse(card);
+                              handleViewVerseClick(card);
                             }}
                             disabled={!ref}
                           >
