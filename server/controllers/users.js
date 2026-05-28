@@ -57,83 +57,89 @@ const updateMe = async (req, res) => {
 };
 
 const recordSalvation = async (req, res) => {
-    try {
-        const userId = req.user?._id || req.user?.id;
+  try {
+    const userId = req.user?._id || req.user?.id;
 
-        if (!userId) {
-            return res.status(401).json({ message: "User ID missing from token" });
-        }
+    if (!userId) {
+      return res.status(401).json({ message: "User ID missing from token" });
+    }
 
-        const {
-            salvationStatus,
-            salvationDate,
-            salvationDateEstimated,
-            salvationTestimony,
-        } = req.body;
+    const {
+      salvationStatus,
+      salvationDate,
+      salvationDateEstimated,
+      salvationTestimony,
+    } = req.body;
 
-        if (!["saved_today", "already_saved", "exploring"].includes(salvationStatus)) {
-            return res.status(400).json({ message: "Invalid salvation status" });
-        }
+    if (!["saved_today", "already_saved", "exploring"].includes(salvationStatus)) {
+      return res.status(400).json({ message: "Invalid salvation status" });
+    }
 
-        const user = await User.findById(userId).select("-password");
+    const user = await User.findById(userId);
 
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-        user.salvationStatus = salvationStatus;
-        user.salvationRecordedAt = new Date();
+    if (!user.displayName) {
+      user.displayName = user.email?.split("@")[0] || "Selah User";
+    }
 
-        if (salvationTestimony !== undefined) {
-            user.salvationTestimony = salvationTestimony;
-        }
-if (salvationStatus === "saved_today") {
-  user.salvationDate = new Date();
-  user.salvationDateEstimated = false;
+    const safeUser = (userDoc) => {
+      const userObject = userDoc.toObject();
+      delete userObject.password;
+      return userObject;
+    };
 
-  if (!user.countedInSalvationCounter) {
-    user.countedInSalvationCounter = true;
-  }
+    user.salvationStatus = salvationStatus;
+    user.salvationRecordedAt = new Date();
 
-  await user.save();
+    if (salvationTestimony !== undefined) {
+      user.salvationTestimony = salvationTestimony;
+    }
 
-  return res.status(200).json({
-    message: "Welcome to the family of God. Your salvation has been recorded.",
-    user,
-  });
-}
+    if (salvationStatus === "saved_today") {
+      user.salvationDate = new Date();
+      user.salvationDateEstimated = false;
+      user.countedInSalvationCounter = true;
 
-        if (salvationStatus === "already_saved") {
-  user.salvationDate = salvationDate ? new Date(salvationDate) : null;
-  user.salvationDateEstimated = Boolean(salvationDateEstimated);
+      await user.save();
 
-  user.countedInSalvationCounter = Boolean(salvationDate);
+      return res.status(200).json({
+        message: "Welcome to the family of God. Your salvation has been recorded.",
+        user: safeUser(user),
+      });
+    }
 
-  await user.save();
+    if (salvationStatus === "already_saved") {
+      user.salvationDate = salvationDate ? new Date(salvationDate) : null;
+      user.salvationDateEstimated = Boolean(salvationDateEstimated);
+      user.countedInSalvationCounter = false;
 
-  return res.status(200).json({
-    message: "Your salvation journey has been saved to your profile.",
-    user,
-  });
-}
+      await user.save();
 
+      return res.status(200).json({
+        message: "Your salvation journey has been saved to your profile.",
+        user: safeUser(user),
+      });
+    }
 
     if (salvationStatus === "exploring") {
-        user.salvationDate = null;
-        user.salvationDateEstimated = false;
-        user.countedInSalvationCounter = false;
+      user.salvationDate = null;
+      user.salvationDateEstimated = false;
+      user.countedInSalvationCounter = false;
 
-        await user.save();
+      await user.save();
 
-        return res.status(200).json({
-            message: "You are always welcome here. Take your time — God is near.",
-            user,
-        });
+      return res.status(200).json({
+        message: "You are always welcome here. Take your time — God is near.",
+        user: safeUser(user),
+      });
     }
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Server error" });
-    }
+  } catch (err) {
+    console.error("Failed to record salvation:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
 module.exports = { getMe, updateMe, recordSalvation };

@@ -74,14 +74,10 @@ async function handleSalvationSuccess(data) {
         setSalvationCount(res.count || 0);
       } catch (err) {
         console.error("Failed to refresh salvation count", err);
-
-
         setSalvationCount((prev) => prev + 1);
       }
     }
   }
-
-  setIsSalvationOpen(false);
 }
 
 

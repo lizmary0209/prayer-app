@@ -161,3 +161,36 @@
     }
 }
 
+.salvation-modal__success {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.salvation-modal__success-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    margin: 0 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(101, 132, 103, 0.14);
+    color: #324032;
+    font-size: 44px;
+    line-height: 1;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    box-shadow: inset 0 0 0 1px rgba(101, 132, 103, 0.18);
+}
+
+.salvation-modal__success .salvation-modal__title {
+    margin-top: 0;
+    text-align: center;
+}
+
+.salvation-modal__success .salvation-modal__text {
+    text-align: center;
+    max-width: 620px;
+}
+
