@@ -373,11 +373,9 @@ export default function Profile({ currentUser, onUserUpdate }) {
                 />
 
                 {isPrayerEditOpen && (
-                    <div className="profile-modal" onClick={closePrayerEditModal}>
+                    <div className="profile-modal">
                         <div
-                        className="profile-modal__content"
-                        onClick={(e) => e.stopPropagation()}
-                        >
+                        className="profile-modal__content">
                             <button
                             type="button"
                             className="profile-modal__close"

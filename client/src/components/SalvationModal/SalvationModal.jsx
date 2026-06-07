@@ -72,11 +72,9 @@ export default function SalvationModal({ isOpen, onClose, onSuccess }) {
   };
 
   return (
-    <div className="salvation-modal" onClick={closeAndReset}>
+    <div className="salvation-modal">
       <div
-        className="salvation-modal__content"
-        onClick={(e) => e.stopPropagation()}
-      >
+        className="salvation-modal__content">
         <button
           type="button"
           className="salvation-modal__close"

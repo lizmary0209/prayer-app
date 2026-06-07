@@ -27,18 +27,14 @@ export default function Modal({
 
     if (!isOpen) return null;
 
-    const stop = (e) => e.stopPropagation();
-
     return (
-        <div className="modal" onMouseDown={(e) => {
-            if (e.target === e.currentTarget) onClose();
-        }}
+        <div 
+         className="modal" 
          role="dialog"
-          aria-modal="true"
+         aria-modal="true"
           >
             <div 
             className={`modal__content modal__content--${size}`}
-            onMouseDown={stop}
             >
                 <div className="modal__header">
                     {title ? <h2 className="modal__title">{title}</h2> : <div />}

@@ -18,27 +18,19 @@ export default function EditProfileModal({
         setProfilePic(currentUser?.profilePic || "");
     }, [isOpen, currentUser]);
 
-    function handleOverlayClick() {
-        onClose();
-    }
-
-    function handleContentClick(e) {
-        e.stopPropagation();
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        onSave({
-            displayName: displayName.trim(),
-            profilePic: profilePic.trim(),
-        });
-    }
+   function handleSubmit(e) {
+    e.preventDefault();
+    onSave({
+        displayName: displayName.trim(),
+        profilePic: profilePic.trim(),
+    });
+   }
 
     if (!isOpen) return null;
 
     return (
-        <div className="editProfileModal" onMouseDown={handleOverlayClick}>
-            <div className="editProfileModal__content" onMouseDown={handleContentClick}>
+        <div className="editProfileModal">
+            <div className="editProfileModal__content">
                 <div className="editProfileModal__header">
                     <h2 className="editProfileModal__title">Edit Profile</h2>
                     <button
