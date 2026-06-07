@@ -12,3 +12,28 @@
 .auth__link:hover {
     opacity: 1;
 }
+
+.auth__password-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.auth__input--password {
+    padding-right: 52px;
+}
+
+.auth__password-toggle {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #5f7f6f;
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

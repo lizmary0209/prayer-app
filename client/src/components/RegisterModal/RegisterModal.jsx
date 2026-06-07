@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Modal from "../Modal/Modal";
 import { signup } from "../../utils/api";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import "./RegisterModal.css";
 
 export default function RegisterModal({
@@ -13,6 +14,7 @@ export default function RegisterModal({
     const [profilePic, setProfilePic] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
@@ -25,6 +27,7 @@ export default function RegisterModal({
         setPassword("");
         setError("");
         setIsSubmitting(false);
+        setShowPassword(false);
     }, [isOpen]);
 
     async function handleSubmit(e) {
@@ -113,10 +116,12 @@ export default function RegisterModal({
                 <label className="auth__label" htmlFor="reg-password">
                     Password
                 </label>
+
+                <div className="auth__password-wrap">
                 <input
                 id="reg-password"
                 className="auth__input"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
@@ -124,6 +129,16 @@ export default function RegisterModal({
                 maxLength={50}
                 required
                 />
+
+                <button
+                type="button"
+                className="auth__password-toggle"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
+                </div>
 
                 <label className="auth__label" htmlFor="reg-avatar">
                     Profile Picture URL (optional)

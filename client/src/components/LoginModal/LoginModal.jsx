@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Modal from "../Modal/Modal";
 import { login } from "../../utils/api";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import "./LoginModal.css";
 
 export default function LoginModal({ isOpen, onClose, onLoggedIn, onOpenRegister }) {
@@ -8,6 +9,7 @@ export default function LoginModal({ isOpen, onClose, onLoggedIn, onOpenRegister
     const [password, setPassword] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -15,6 +17,7 @@ export default function LoginModal({ isOpen, onClose, onLoggedIn, onOpenRegister
         setPassword("");
         setError("");
         setIsSubmitting(false);
+        setShowPassword(false);
     }, [isOpen]);
 
     async function handleSubmit(e) {
@@ -87,10 +90,12 @@ export default function LoginModal({ isOpen, onClose, onLoggedIn, onOpenRegister
                 <label className="auth__label" htmlFor="login-password">
                     Password
                 </label>
+
+                <div className="auth__password-wrap">
                 <input
                 id="login-password"
-                className="auth__input"
-                type="password"
+                className="auth__input auth__input--password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your password"
@@ -99,6 +104,16 @@ export default function LoginModal({ isOpen, onClose, onLoggedIn, onOpenRegister
                 maxLength={50}
                 required
                 />
+
+                <button
+                type="button"
+                className="auth__password-toggle"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
+                </div>
 
                 {error && <p className="auth__error">{error}</p>}
 
