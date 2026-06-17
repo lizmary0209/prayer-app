@@ -328,6 +328,18 @@ const getCategoryMatches = (categoryValue) => {
         prev.map((card) => (card._id === selectedCard._id ? data.prayer : card))
       );
 
+      setVerseState((prev) => ({
+        ...prev,
+        [selectedCard._id]: {
+          isOpen: false,
+          loading: false,
+          error: "",
+          text: "",
+          reference: "",
+          translation: "",
+        },
+      }));
+
       handleCloseEdit();
     } catch (err) {
       console.error(err);
@@ -538,7 +550,7 @@ const getCategoryMatches = (categoryValue) => {
                           )}
                           {v.error && <p className="cards__error">{v.error}</p>}
 
-                          {!v.loading && !v.error && v.text && (
+                          {v.isOpen && !v.loading && !v.error && v.text && (
                             <>
                               <p className="cards__verse-text">{v.text}</p>
                               <p className="cards__muted">

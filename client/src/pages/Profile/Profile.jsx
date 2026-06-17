@@ -5,7 +5,7 @@ import "./Profile.css";
 import EditProfileModal from "../../components/EditProfileModal/EditProfileModal";
 import { getMyPrayers, updateMe } from "../../utils/api";
 
-export default function Profile({ currentUser, onUserUpdate }) {
+export default function Profile({ currentUser, onUserUpdate, onEditSalvationJourney }) {
     const navigate = useNavigate();
 
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -142,10 +142,12 @@ export default function Profile({ currentUser, onUserUpdate }) {
         };
     }, []);
 
-    function formatSalvationDate(dateValue) {
+    function formatSalvationDate(dateValue, salvationStatus) {
         if (!dateValue) return null;
 
-        const date = new Date(dateValue);
+        if (salvationStatus === "saved_today") {
+            const date = new Date(dateValue);
+
 
         if (Number.isNaN(date.getTime())) return null;
 
@@ -158,6 +160,21 @@ export default function Profile({ currentUser, onUserUpdate }) {
         }).format(date);
     }
 
+    const dateOnly = String(dateValue).slice(0, 10);
+    const [year, month, day] = dateOnly.split("-").map(Number);
+
+    if (!year || !month || !day) return null;
+
+    const localDate = new Date(year, month -1, day);
+
+    return new Intl.DateTimeFormat("en-US", {
+        month: "long", 
+        day: "numeric",
+        year: "numeric",
+    }).format(localDate);
+}
+
+
     const salvationStatus = currentUser?.salvationStatus || null;
     const salvationDate =
         currentUser?.salvationDate ||
@@ -165,7 +182,10 @@ export default function Profile({ currentUser, onUserUpdate }) {
         currentUser?.savedAt ||
         null;
 
-    const formattedSalvationDate = formatSalvationDate(salvationDate);
+    const formattedSalvationDate = formatSalvationDate(
+        salvationDate,
+    salvationStatus
+);
 
     let salvationHeading = "No salvation response recorded yet";
     let salvationMessage =
@@ -286,6 +306,14 @@ export default function Profile({ currentUser, onUserUpdate }) {
                                 </p>
                             </div>
                         ) : null}
+
+                        <button
+                                className="profile__salvationEditBtn"
+                                type="button"
+                                onClick={onEditSalvationJourney}
+                                >
+                                    Edit Salvation Journey
+                                </button>
                     </article>
                 </section>
 

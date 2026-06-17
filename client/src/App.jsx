@@ -24,6 +24,8 @@ const [isLoginOpen, setIsLoginOpen] = useState(false);
 const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 const [cardsRefreshToken, setCardsRefreshToken] = useState(0);
 const [isSalvationOpen, setIsSalvationOpen] = useState(false);
+const [salvationModalStep, setSalvationModalStep] = useState("initial");
+const [salvationModalInitialData, setSalvationModalInitialData] = useState(null);
 const [salvationCount, setSalvationCount] = useState(0);
 const [salvationEvent, setSalvationEvent] = useState(false);
 
@@ -54,13 +56,23 @@ const [salvationEvent, setSalvationEvent] = useState(false);
     setIsRegisterOpen(false);
   }
 
-  function handleOpenSalvationModal() {
-    setIsSalvationOpen(true);
-  }
+ function handleOpenSalvationModal() {
+  setSalvationModalStep("initial");
+  setSalvationModalInitialData(null);
+  setIsSalvationOpen(true);
+ }
 
-  function handleCloseSalvationModal() {
-    setIsSalvationOpen(false);
-  }
+ function handleEditSalvationJourney() {
+  setSalvationModalStep("already");
+  setSalvationModalInitialData(currentUser);
+  setIsSalvationOpen(true);
+ }
+
+ function handleCloseSalvationModal() {
+  setIsSalvationOpen(false);
+  setSalvationModalStep("initial");
+  setSalvationModalInitialData(null);
+ }
 
 async function handleSalvationSuccess(data) {
   if (data?.user) {
@@ -97,6 +109,8 @@ async function handleSalvationSuccess(data) {
         setIsLoginOpen(false);
         setIsRegisterOpen(false);
         setIsSalvationOpen(false);
+        setSalvationModalStep("initial");
+        setSalvationModalInitialData(null);
       }
     }
 
@@ -169,6 +183,7 @@ async function handleSalvationSuccess(data) {
       <Profile
         currentUser={currentUser}
         onUserUpdate={(user) => setCurrentUser(user)}
+        onEditSalvationJourney={handleEditSalvationJourney}
       />
     }
   />
@@ -219,6 +234,8 @@ async function handleSalvationSuccess(data) {
             isOpen={isSalvationOpen}
             onClose={handleCloseSalvationModal}
             onSuccess={handleSalvationSuccess}
+            initialStep={salvationModalStep}
+            initialData={salvationModalInitialData}
             />
 </>
   );

@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import "./SalvationModal.css";
 import { recordSalvation } from "../../utils/api";
 
-export default function SalvationModal({ isOpen, onClose, onSuccess }) {
+export default function SalvationModal({
+   isOpen,
+    onClose,
+     onSuccess,
+    initialStep = "initial",
+  initialData = null,
+ }) {
   const [step, setStep] = useState("initial");
   const [date, setDate] = useState("");
   const [isEstimated, setIsEstimated] = useState(false);
@@ -10,18 +16,39 @@ export default function SalvationModal({ isOpen, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  useEffect(() => {
-    if (!isOpen) {
-      setStep("initial");
-      setDate("");
-      setIsEstimated(false);
-      setTestimony("");
-      setLoading(false);
-      setSuccessMessage("");
-    }
-  }, [isOpen]);
+  const formatDateForInput = (dateValue) => {
+    if (!dateValue) return "";
 
-  if (!isOpen) return null;
+    const dateOnly = String(dateValue).slice(0, 10);
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateOnly)) {
+      return dateOnly;
+    }
+
+    return "";
+  };
+
+  useEffect(() => {
+  if (isOpen) {
+    setStep(initialStep);
+    setDate(formatDateForInput(initialData?.salvationDate));
+    setIsEstimated(Boolean(initialData?.salvationDateEstimated));
+    setTestimony(initialData?.salvationTestimony || "");
+    setLoading(false);
+    setSuccessMessage("");
+    return;
+  }
+
+  setStep("initial");
+  setDate("");
+  setIsEstimated(false);
+  setTestimony("");
+  setLoading(false);
+  setSuccessMessage("");
+}, [isOpen, initialStep, initialData]);
+
+if (!isOpen) return null;
+
 
   const closeAndReset = () => {
     setStep("initial");
@@ -62,10 +89,16 @@ export default function SalvationModal({ isOpen, onClose, onSuccess }) {
     });
   };
 
+  const normalizeSalvationDate = (dateValue) => {
+    if (!dateValue) return null;
+
+    return new Date(`${dateValue}T12:00:00`).toISOString();
+  };
+
   const handleAlreadySavedSubmit = () => {
     handleRecordSalvation({
       salvationStatus: "already_saved",
-      salvationDate: date || null,
+      salvationDate: normalizeSalvationDate(date),
       salvationDateEstimated: isEstimated,
       salvationTestimony: testimony,
     });
@@ -168,7 +201,11 @@ export default function SalvationModal({ isOpen, onClose, onSuccess }) {
                 onClick={handleAlreadySavedSubmit}
                 disabled={loading}
               >
-                {loading ? "Saving..." : "Save My Salvation"}
+                {loading
+                 ? "Saving..."
+                  : initialStep === "already"
+                  ? "Update Salvation Journey"
+                  : "Save My Salvation"}
               </button>
 
               <button
