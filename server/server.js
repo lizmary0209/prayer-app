@@ -24,7 +24,9 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/prayers", prayerRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/dev", devRoutes);
+if (process.env.NODE_ENV !== "production") {
+  app.use("/api/dev", devRoutes);
+}
 app.use("/api/scripture", scriptureRoutes);
 app.use("/api/salvation", salvationRoutes);
 

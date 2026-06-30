@@ -167,6 +167,9 @@ const getCategoryMatches = (categoryValue) => {
 };
 
   const filteredCards = getCategoryMatches(activeCategory);
+  const activeCategoryLabel =
+    PRAYER_CATEGORIES.find((category) => category.value === activeCategory)?.label ||
+    "prayers";
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
@@ -424,9 +427,6 @@ const getCategoryMatches = (categoryValue) => {
               const currentUserId = currentUser?._id || currentUser?.id;
               const ownerId = card.createdBy?._id || card.createdBy?.id;
               const isOwner = ownerId === currentUserId;
-
-              const activeCategoryLabel = 
-              PRAYER_CATEGORIES.find((category) => category.value === activeCategory)?.label || "prayers";
 
               return (
                 <li
