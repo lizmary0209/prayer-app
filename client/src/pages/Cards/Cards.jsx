@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { request, getSalvationCount } from "../../utils/api";
 import "./Cards.css";
 
@@ -114,6 +113,13 @@ function getNatureImage(card) {
   const idx = hashString(String(seed) + category) % pool.length;
 
   return pool[idx];
+}
+
+function getCategoryLabel(categoryValue) {
+  return (
+    PRAYER_CATEGORIES.find((category) => category.value === categoryValue)?.label ||
+    "Simple / Neutral"
+  );
 }
 
 function Cards({ currentUser, refreshToken }) {
@@ -353,20 +359,12 @@ const getCategoryMatches = (categoryValue) => {
   return (
     <main className="cards">
       <section className="cards__header">
-        <Link to="/" className="cards__page-link cards__page-link--left">
-          ← Main Page
-        </Link>
-
         <div className="cards__header-main">
           <h1 className="cards__title">Prayer Wall</h1>
           <p className="cards__subtitle">
             A place to pause, pray, and stand in faith together
           </p>
         </div>
-
-        <Link to="/profile" className="cards__page-link cards__page-link--right">
-          Your Profile →
-        </Link>
 
         <div className="cards__counter">
           <span className="cards__counter-number">{salvationCount}</span>
@@ -375,9 +373,6 @@ const getCategoryMatches = (categoryValue) => {
           </span>
         </div>
       </section>
-
-      {loading && <p className="cards__muted">Loading cards...</p>}
-      {error && <p className="cards__error">{error}</p>}
 
       <section className="cards__layout">
         <aside className="categories">
@@ -405,6 +400,22 @@ const getCategoryMatches = (categoryValue) => {
         </aside>
 
         <section className="feed">
+          {loading && (
+            <div className="cards__state">
+              <p className="cards__state-kicker">Prayer Wall</p>
+              <h2>Loading prayers...</h2>
+              <p>Gathering the latest prayers for this space.</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="cards__state cards__state--error">
+              <p className="cards__state-kicker">Something went wrong</p>
+              <h2>Could not load prayers</h2>
+              <p>{error}</p>
+            </div>
+          )}
+
           {!loading && !error && filteredCards.length === 0 && (
             <div className="cards__empty">
               <h3 >
@@ -427,6 +438,7 @@ const getCategoryMatches = (categoryValue) => {
               const currentUserId = currentUser?._id || currentUser?.id;
               const ownerId = card.createdBy?._id || card.createdBy?.id;
               const isOwner = ownerId === currentUserId;
+              const categoryLabel = getCategoryLabel(getCoverCategory(card));
 
               return (
                 <li
@@ -455,10 +467,14 @@ const getCategoryMatches = (categoryValue) => {
                         <div className="cards__top">
                           <div>
                             <h3 className="cards__item-title">{card.title}</h3>
+                            <div className="cards__meta" aria-label="Prayer details">
+                              <span className="cards__meta-pill">{categoryLabel}</span>
+                              {ref && <span className="cards__meta-ref">{ref}</span>}
+                            </div>
                           </div>
 
                           <button
-                            className="cards__btn"
+                            className="cards__btn cards__btn--verse"
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -471,43 +487,45 @@ const getCategoryMatches = (categoryValue) => {
                         </div>
 
                         <div className="cards__actions">
-                          <button
-                            className="cards__btn"
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleLike(card._id);
-                            }}
-                          >
-                            Like
-                          </button>
-
-                          <button
-                            className="cards__btn cards__btn--pray"
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handlePray(card._id);
-                            }}
-                          >
-                            Pray on this
-                          </button>
-
-                          {isOwner && (
+                          <div className="cards__action-buttons">
                             <button
                               className="cards__btn"
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleEditClick(card);
+                                handleLike(card._id);
                               }}
                             >
-                              Edit
+                              Like
                             </button>
-                          )}
+
+                            <button
+                              className="cards__btn cards__btn--pray"
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePray(card._id);
+                              }}
+                            >
+                              Pray on this
+                            </button>
+
+                            {isOwner && (
+                              <button
+                                className="cards__btn"
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditClick(card);
+                                }}
+                              >
+                                Edit
+                              </button>
+                            )}
+                          </div>
 
                           <span className="cards__likes">
-                            {likesCount} like{likesCount === 1 ? "" : "s"} •{" "}
+                            {likesCount} like{likesCount === 1 ? "" : "s"} -{" "}
                             {prayedCount} prayer
                             {prayedCount === 1 ? "" : "s"}
                           </span>
@@ -524,11 +542,14 @@ const getCategoryMatches = (categoryValue) => {
                         <div className="cards__top">
                           <div>
                             <h3 className="cards__item-title">{card.title}</h3>
-                            <p className="cards__ref">{ref}</p>
+                            <div className="cards__meta" aria-label="Prayer details">
+                              <span className="cards__meta-pill">{categoryLabel}</span>
+                              {ref && <span className="cards__meta-ref">{ref}</span>}
+                            </div>
                           </div>
 
                           <button
-                            className="cards__btn"
+                            className="cards__btn cards__btn--verse"
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -555,56 +576,58 @@ const getCategoryMatches = (categoryValue) => {
                               <p className="cards__verse-text">{v.text}</p>
                               <p className="cards__muted">
                                 {v.reference}
-                                {v.translation ? ` • ${v.translation}` : ""}
+                                {v.translation ? ` - ${v.translation}` : ""}
                               </p>
                             </>
                           )}
 
                           {!v.loading && !v.error && !v.text && (
                             <p className="cards__muted">
-                              Tap “View Verse” to load scripture.
+                              Tap "View Verse" to load scripture.
                             </p>
                           )}
                         </div>
 
                         <div className="cards__actions">
-                          <button
-                            className="cards__btn"
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleLike(card._id);
-                            }}
-                          >
-                            Like
-                          </button>
-
-                          <button
-                            className="cards__btn cards__btn--pray"
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handlePray(card._id);
-                            }}
-                          >
-                            Pray on this
-                          </button>
-
-                          {isOwner && (
+                          <div className="cards__action-buttons">
                             <button
                               className="cards__btn"
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleEditClick(card);
+                                handleLike(card._id);
                               }}
                             >
-                              Edit
+                              Like
                             </button>
-                          )}
+
+                            <button
+                              className="cards__btn cards__btn--pray"
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePray(card._id);
+                              }}
+                            >
+                              Pray on this
+                            </button>
+
+                            {isOwner && (
+                              <button
+                                className="cards__btn"
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditClick(card);
+                                }}
+                              >
+                                Edit
+                              </button>
+                            )}
+                          </div>
 
                           <span className="cards__likes">
-                            {likesCount} like{likesCount === 1 ? "" : "s"} •{" "}
+                            {likesCount} like{likesCount === 1 ? "" : "s"} -{" "}
                             {prayedCount} prayer
                             {prayedCount === 1 ? "" : "s"}
                           </span>

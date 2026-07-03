@@ -35,13 +35,13 @@ function Home({
             <div className="home__image-layer" />
 
             <section className="home__content">
-                <p className="home__eyebrow">Pause • Pray • Remember</p>
+                <p className="home__eyebrow">Selah</p>
 
 
-                <h1 className="home__title">Selah</h1>
+                <h1 className="home__title">Selah Prayer Wall</h1>
 
                 <p className="home__subtitle">
-                    A quiet place to pray, reflect, and draw closer to God.
+                    A quiet place to share prayer, stand with others, and remember what God is doing.
                 </p>
 
                 <div className="home__counter">
@@ -61,7 +61,7 @@ function Home({
                     type="button"
                     onClick={() => navigate("/cards")}
                     >
-                        Enter Prayer Space
+                        Enter Prayer Wall
                         </button>
 
                         {!isLoggedIn && (
@@ -78,12 +78,12 @@ function Home({
         </section>
 
         <section className="home__intro">
-            <p className="home__intro-kicker">A prayer wall for real moments</p>
+            <p className="home__intro-kicker">Shared prayer for real moments</p>
             <h2 className="home__intro-title">
-                Share what is on your heart, or quietly stand with someone else in prayer. 
+                Bring what is on your heart into a gathered place of prayer, or quietly stand with someone else in faith.
             </h2>
             <p className="home__intro-text">
-                Selah is being built as a peaceful space for prayer, encouragement, testimony, and reflection - a reminder that no prayer is too small and no person is forgotten. 
+                The Prayer Wall is where you can read prayers, share what is on your heart, and pray with others - a reminder that no prayer is too small and no person is forgotten.
             </p>
         </section>
     </main>

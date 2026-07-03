@@ -1,11 +1,13 @@
 .editProfileModal {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    background: #fffdf8;
+    border: 1px solid #eadcc4;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    padding: 32px;
     z-index: 999;
 }
 
@@ -29,6 +31,7 @@
 .editProfileModal__title {
     margin: 0;
     font-size: 20px;
+    color: #263829;
 }
 
 .editProfileModal__close {
@@ -69,12 +72,12 @@
 
 .editProfileModal__submit {
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     padding: 12px;
     cursor: pointer;
     font-size: 15px;
-    background: #111827;
-    color: white;
+    background: #4f6f52;
+    color: #fffdf8;
 }
 
 .editProfileModal__submit:disabled {

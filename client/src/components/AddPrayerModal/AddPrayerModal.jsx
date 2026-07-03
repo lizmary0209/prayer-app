@@ -130,7 +130,7 @@ export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode =
           className="add-prayer__input"
           value={scripture}
           onChange={(e) => setScripture(e.target.value)}
-          placeholder="e.g. Philippians 4:6–7"
+          placeholder="e.g. Philippians 4:6-7"
         />
 
         <label className="add-prayer__label">Prayer</label>
@@ -145,7 +145,7 @@ export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode =
         {error && <p className="add-prayer__error">{error}</p>}
 
         <p className="add-prayer__hint">
-          Tip: Selah is about pausing — your words don’t need to be perfect.
+          Tip: Selah is about pausing - your words don't need to be perfect.
         </p>
       </form>
     </Modal>

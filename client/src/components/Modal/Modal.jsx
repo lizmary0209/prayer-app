@@ -39,7 +39,7 @@ export default function Modal({
                 <div className="modal__header">
                     {title ? <h2 className="modal__title">{title}</h2> : <div />}
                     <button className="modal__close" type="button" onClick={onClose} aria-label="Close">
-                        ×
+                        x
                     </button>
                 </div>
 

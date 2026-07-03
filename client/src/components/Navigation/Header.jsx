@@ -29,14 +29,34 @@ export default function Header({
             <div className="brand__nameRow">
               <div className="brand__name">Selah</div>
               <span className="brand__dot" aria-hidden="true">
-                •
+                -
               </span>
               <div className="brand__sub">Because your prayers matter.</div>
             </div>
           </div>
         </Link>
 
-        <nav className="header__actions">
+        <nav className="header__nav" aria-label="Primary navigation">
+          <Link className="header__link" to="/">
+            Home
+          </Link>
+          <Link className="header__link" to="/cards">
+            Prayer Wall
+          </Link>
+          {isLoggedIn && (
+            <Link className="header__link header__link--profile" to="/profile">
+              <img
+                className="header__avatar"
+                src={avatarSrc}
+                alt={`${displayName} avatar`}
+                referrerPolicy="no-referrer"
+              />
+              Profile
+            </Link>
+          )}
+        </nav>
+
+        <nav className="header__actions" aria-label="Account actions">
           {!isLoggedIn ? (
             <>
               <button
@@ -52,7 +72,7 @@ export default function Header({
                 type="button"
                 onClick={onOpenRegister}
               >
-                Register
+                Create Account
               </button>
             </>
           ) : (
@@ -73,25 +93,12 @@ export default function Header({
                 Salvation Prayer
               </button>
 
-              <div className="header__profile">
-                <img
-                  className="header__avatar"
-                  src={avatarSrc}
-                  alt={`${displayName} avatar`}
-                  referrerPolicy="no-referrer"
-                />
-
-                <Link className="header__profileLink" to="/profile">
-                  {displayName}
-                </Link>
-              </div>
-
               <button
                 className="btn btn--ghost"
                 type="button"
                 onClick={onLogout}
               >
-                Logout
+                Sign Out
               </button>
             </>
           )}

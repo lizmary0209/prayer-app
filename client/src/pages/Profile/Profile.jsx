@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 
 import EditProfileModal from "../../components/EditProfileModal/EditProfileModal";
 import { getMyPrayers, updateMe } from "../../utils/api";
 
-export default function Profile({ currentUser, onUserUpdate, onEditSalvationJourney }) {
-    const navigate = useNavigate();
+const PRAYER_CATEGORY_LABELS = {
+    sunrise: "Hope & Joy",
+    water: "Peace & Rest",
+    mountains: "Strength & Courage",
+    forest: "Healing & Comfort",
+    fields: "Provision & Growth",
+    neutral: "Simple / Neutral",
+};
 
+export default function Profile({ currentUser, onUserUpdate, onEditSalvationJourney }) {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState("");
@@ -22,10 +28,6 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
     const [editingDescription, setEditingDescription] = useState("");
     const [isUpdatingPrayer, setIsUpdatingPrayer] = useState(false);
     const [prayerSaveError, setPrayerSaveError] = useState("");
-
-    function goBack() {
-        navigate("/cards");
-    }
 
     useEffect(() => {
         if (!currentUser) return;
@@ -190,17 +192,17 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
     let salvationHeading = "No salvation response recorded yet";
     let salvationMessage =
         "When you choose a salvation option in Selah, your journey will be reflected here.";
-    let salvationLabel = "✝ Faith Journey";
+    let salvationLabel = "Faith Journey";
 
     if (salvationStatus === "saved_today") {
-        salvationLabel = "✝ Your Salvation Date";
+        salvationLabel = "Your Salvation Date";
         salvationHeading = formattedSalvationDate || "Today";
         salvationMessage =
             "Welcome to the family of God. Your salvation has been recorded.";
     }
 
     if (salvationStatus === "already_saved") {
-        salvationLabel = "✝ Saved Before Joining Selah";
+        salvationLabel = "Saved Before Joining Selah";
         salvationHeading =
             formattedSalvationDate || "Known to God, exact date not remembered";
         salvationMessage =
@@ -213,25 +215,21 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
     }
 
     if (salvationStatus === "exploring") {
-        salvationLabel = "✝ Faith Journey";
+        salvationLabel = "Faith Journey";
         salvationHeading = "Still exploring faith";
         salvationMessage =
-            "You are always welcome here. Take your time — God is near.";
+            "You are always welcome here. Take your time - God is near.";
     }
 
     if (!currentUser) {
         return (
             <main className="profile">
                 <div className="profile__container">
-                    <button className="profile__back" type="button" onClick={goBack}>
-                        ← Back to Prayers
-                    </button>
-
                     <section className="profile__hero profile__hero--signedOut">
-                        <p className="profile__eyebrow">Your Selah Space</p>
-                        <h1 className="profile__title">Profile</h1>
+                        <p className="profile__eyebrow">My Selah</p>
+                        <h1 className="profile__title">Your Prayer Space</h1>
                         <p className="profile__subtitle">
-                            Please sign in to view your profile, prayers, and spiritual journey.
+                            Please sign in to view your prayer wall activity, prayers, and faith journey.
                         </p>
                     </section>
                 </div>
@@ -242,16 +240,12 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
     return (
         <main className="profile">
             <div className="profile__container">
-                <button className="profile__back" type="button" onClick={goBack}>
-                    ← Back to Prayers
-                </button>
-
                 <section className="profile__hero">
                     <div>
-                        <p className="profile__eyebrow">Your Selah Space</p>
-                        <h1 className="profile__title">Profile</h1>
+                        <p className="profile__eyebrow">My Selah</p>
+                        <h1 className="profile__title">Your Prayer Space</h1>
                         <p className="profile__subtitle">
-                            A peaceful place to view your prayers, reflect on your journey,
+                            A peaceful place to view your prayer activity, reflect on your faith journey,
                             and keep meaningful moments close.
                         </p>
                     </div>
@@ -266,7 +260,7 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
                 </section>
 
                 <section className="profile__topGrid">
-                    <article className="profile__card profile__card--identify">
+                    <article className="profile__card profile__card--identity">
                         <img
                             className="profile__avatar"
                             src={
@@ -278,7 +272,7 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
                         />
 
                         <div className="profile__identityText">
-                            <p className="profile__label">Profile</p>
+                            <p className="profile__label">Account</p>
                             <h2 className="profile__name">{currentUser.displayName}</h2>
                             <p className="profile__email">{currentUser.email}</p>
                         </div>
@@ -324,33 +318,40 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
                     </article>
 
                     <article className="profile__statCard">
-                        <span className="profile__statLabel">Prayer Space</span>
-                        <span className="profile__statValue">Personal Sanctuary</span>
+                        <span className="profile__statLabel">Selah Activity</span>
+                        <span className="profile__statValue">Prayer Wall</span>
                     </article>
                 </section>
 
                 <section className="profile__section">
                     <div className="profile__sectionHeader">
                         <div>
-                            <p className="profile__eyebrow">Prayer Collection</p>
+                            <p className="profile__eyebrow">Selah Activity</p>
                             <h2 className="profile__sectionTitle">My Prayers</h2>
                         </div>
                     </div>
 
                     {isLoadingPrayers ? (
-                        <p className="profile__muted">Loading your prayers...</p>
+                        <div className="profile__state">
+                            <p className="profile__stateKicker">My Prayers</p>
+                            <h3>Loading your prayers...</h3>
+                            <p>Gathering what you have shared on the prayer wall.</p>
+                        </div>
                     ) : null}
 
                     {prayersError ? (
-                        <p className="profile__error">{prayersError}</p>
+                        <div className="profile__state profile__state--error">
+                            <p className="profile__stateKicker">Something went wrong</p>
+                            <h3>Could not load your prayers</h3>
+                            <p>{prayersError}</p>
+                        </div>
                     ) : null}
 
                     {!isLoadingPrayers && !prayersError && myPrayers.length === 0 ? (
                         <div className="profile__emptyState">
                             <h3 className="profile__emptyTitle">No prayers yet</h3>
                             <p className="profile__muted">
-                                Start adding prayers and they'll appear here in your personal
-                                sanctuary.
+                                Start adding prayers and they'll appear here in your Selah activity.
                             </p>
                         </div>
                     ) : null}
@@ -367,6 +368,13 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
                                             <h3 className="profile__prayerTitle">
                                                 {p.title || "Untitled prayer"}
                                             </h3>
+                                            <div className="profile__prayerDetails">
+                                                <span>
+                                                    {PRAYER_CATEGORY_LABELS[p.category] ||
+                                                        PRAYER_CATEGORY_LABELS.neutral}
+                                                </span>
+                                                {p.scripture ? <span>{p.scripture}</span> : null}
+                                            </div>
                                         </div>
 
                                         <button
@@ -409,7 +417,7 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
                             className="profile-modal__close"
                             onClick={closePrayerEditModal}
                             >
-                                ×
+                                x
                             </button>
 
                             <h2 className="profile-modal__title">Edit Prayer</h2>

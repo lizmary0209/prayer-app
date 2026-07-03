@@ -91,6 +91,7 @@ router.put("/:id/pray", authMiddleware, async (req, res) => {
 
     prayer.prayedCount += 1;
     await prayer.save();
+    await prayer.populate("createdBy", "displayName profilePic");
 
     res.status(200).json({
       message: "Prayer count updated",
@@ -146,6 +147,7 @@ router.post("/:id/like", authMiddleware, async (req, res) => {
     }
 
     await prayer.save();
+    await prayer.populate("createdBy", "displayName profilePic");
 
     res.json({ message: "Like updated", prayer });
   } catch (error) {

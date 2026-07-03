@@ -16,7 +16,7 @@ export default function PrayerCard({ prayer, delayMs = 0 }) {
           Details
         </button>
         <button className="btn" type="button">
-          🙏 Amen
+          Amen
         </button>
       </div>
     </article>

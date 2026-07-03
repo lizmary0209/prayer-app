@@ -34,13 +34,13 @@ router.post("/seed-prayers", async (req, res) => {
       {
         title: "Strength",
         scripture: "Isaiah 41:10",
-        message: "You're not alone—God is with you.",
+        message: "You're not alone - God is with you.",
         isPremade: true,
       },
       {
         title: "Peace",
         scripture: "Philippians 4:6-7",
-        message: "Bring it to God—His peace will guard your heart.",
+        message: "Bring it to God - His peace will guard your heart.",
         isPremade: true,
       },
       {

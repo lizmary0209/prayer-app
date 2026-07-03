@@ -4,6 +4,16 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+function serializeUser(user) {
+  const userObject = user.toObject ? user.toObject() : { ...user };
+  delete userObject.password;
+
+  return {
+    ...userObject,
+    id: String(userObject._id),
+  };
+}
+
 // POST /api/auth/signup
 router.post("/signup", async (req, res) => {
   try {
@@ -34,12 +44,7 @@ router.post("/signup", async (req, res) => {
     return res.status(201).json({
       message: "User created successfully",
       token,
-      user: {
-        id: newUser._id,
-        email: newUser.email,
-        displayName: newUser.displayName,
-        profilePic: newUser.profilePic,
-      },
+      user: serializeUser(newUser),
     });
   } catch (error) {
     console.error("SIGNUP ERROR:", error);
@@ -83,12 +88,7 @@ router.post("/login", async (req, res) => {
     return res.json({
       message: "Login successful",
       token,
-      user: {
-        id: user._id,
-        email: user.email,
-        displayName: user.displayName,
-        profilePic: user.profilePic,
-      },
+      user: serializeUser(user),
     });
   } catch (error) {
     console.error("LOGIN ERROR:", error);

@@ -1,35 +1,13 @@
 .profile {
   min-height: 100vh;
-  background: #edf3ee;
+  background: #f8f4ec;
   padding: 32px 24px 64px;
-  color: #244232;
+  color: #223024;
 }
 
 .profile__container {
   max-width: 1200px;
   margin: 0 auto;
-}
-
-.profile__back {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid #cfd8cc;
-  background: #f8fbf7;
-  color: #244232;
-  border-radius: 999px;
-  padding: 12px 18px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
-  margin-bottom: 28px;
-}
-
-.profile__back:hover {
-  background: #ffffff;
-  box-shadow: 0 10px 24px rgba(36, 66, 50, 0.08);
-  transform: translateY(-1px);
 }
 
 .profile__hero {
@@ -50,14 +28,15 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #55705e;
+  color: #6f8065;
 }
 
 .profile__title {
   margin: 0;
   font-size: clamp(2.5rem, 4vw, 4.25rem);
   line-height: 0.95;
-  color: #163824;
+  color: #223024;
+  letter-spacing: 0;
 }
 
 .profile__subtitle {
@@ -65,13 +44,13 @@
   margin: 14px 0 0;
   font-size: 17px;
   line-height: 1.7;
-  color: #597062;
+  color: #5f6c5b;
 }
 
 .profile__editBtn {
-  border: 1px solid #d8cfa8;
-  background: #f5efda;
-  color: #355846;
+  border: 1px solid rgba(159, 115, 52, 0.22);
+  background: #f3ede1;
+  color: #344837;
   border-radius: 999px;
   padding: 13px 22px;
   font-size: 15px;
@@ -90,17 +69,17 @@
 .profile__topGrid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
-  gap: 24px;
-  margin-bottom: 24px;
+  gap: 22px;
+  margin-bottom: 22px;
 }
 
 .profile__card {
   position: relative;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(200, 212, 202, 0.95);
-  border-radius: 28px;
-  padding: 28px;
-  box-shadow: 0 18px 45px rgba(35, 62, 47, 0.07);
+  background: rgba(255, 253, 248, 0.9);
+  border: 1px solid rgba(47, 67, 41, 0.1);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 18px 45px rgba(31, 42, 31, 0.08);
   backdrop-filter: blur(4px);
 }
 
@@ -113,7 +92,7 @@
 .profile__card--salvation {
   overflow: hidden;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(246, 250, 246, 0.92));
+    linear-gradient(180deg, rgba(255, 253, 248, 0.96), rgba(243, 237, 225, 0.76));
 }
 
 .profile__cardAccent {
@@ -121,7 +100,7 @@
   inset: 0 auto auto 0;
   width: 100%;
   height: 8px;
-  background: linear-gradient(90deg, #d7e7dd 0%, #f2ead1 50%, #dce8f0 100%);
+  background: linear-gradient(90deg, #4f7157 0%, #b88334 55%, #d8cfa8 100%);
 }
 
 .profile__avatar {
@@ -151,7 +130,7 @@
   margin: 0;
   font-size: 2rem;
   line-height: 1.05;
-  color: #193926;
+  color: #223024;
 }
 
 .profile__email {
@@ -163,9 +142,9 @@
 
 .profile__salvationDate {
   margin: 0;
-  font-size: 1.7rem;
+  font-size: 1.55rem;
   line-height: 1.25;
-  color: #1c3e2a;
+  color: #223024;
 }
 
 .profile__salvationDate--empty {
@@ -183,15 +162,15 @@
 .profile__stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  margin-bottom: 34px;
+  gap: 16px;
+  margin-bottom: 30px;
 }
 
 .profile__statCard {
-  background: #f9fbf8;
-  border: 1px solid #dbe5db;
-  border-radius: 22px;
-  padding: 20px 22px;
+  background: #fffdf8;
+  border: 1px solid rgba(47, 67, 41, 0.1);
+  border-radius: 8px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -227,7 +206,7 @@
   margin: 0;
   font-size: clamp(2rem, 3vw, 3rem);
   line-height: 1;
-  color: #173824;
+  color: #223024;
 }
 
 .profile__muted {
@@ -248,10 +227,11 @@
 }
 
 .profile__emptyState {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px dashed #cad7cb;
-  border-radius: 24px;
-  padding: 28px;
+  background: #fffdf8;
+  border: 1px dashed rgba(47, 67, 41, 0.18);
+  border-radius: 8px;
+  padding: 34px 28px;
+  text-align: center;
 }
 
 .profile__emptyTitle {
@@ -263,28 +243,28 @@
 .profile__prayerGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
+  gap: 20px;
   margin-top: 20px;
 }
 
 .profile__prayerCard {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, #fcfdfb 0%, #f4f8f3 100%);
-  border: 1px solid #d6e0d5;
-  border-radius: 28px;
-  box-shadow: 0 14px 36px rgba(35, 62, 47, 0.06);
+  background: linear-gradient(180deg, #fffdf8 0%, #f3ede1 100%);
+  border: 1px solid rgba(47, 67, 41, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 14px 36px rgba(31, 42, 31, 0.08);
 }
 
 .profile__prayerAccent {
-  height: 74px;
+  height: 56px;
   background:
-    linear-gradient(135deg, rgba(213, 230, 220, 0.9), rgba(243, 236, 215, 0.72) 55%, rgba(225, 236, 244, 0.8));
-  border-bottom: 1px solid rgba(207, 218, 207, 0.85);
+    linear-gradient(135deg, rgba(79, 113, 87, 0.2), rgba(184, 131, 52, 0.18) 58%, rgba(255, 253, 248, 0.72));
+  border-bottom: 1px solid rgba(47, 67, 41, 0.1);
 }
 
 .profile__prayerContent {
-  padding: 22px 22px 24px;
+  padding: 20px 20px 22px;
 }
 
 .profile__prayerTop {
@@ -305,15 +285,36 @@
 
 .profile__prayerTitle {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   line-height: 1.15;
   color: #1b3a28;
 }
 
+.profile__prayerDetails {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.profile__prayerDetails span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: #3f5f46;
+  background: rgba(255, 253, 248, 0.86);
+  border: 1px solid rgba(79, 113, 87, 0.14);
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
 .profile__prayerDesc {
-  margin: 16px 0 0;
+  margin: 14px 0 0;
   font-size: 15px;
-  line-height: 1.8;
+  line-height: 1.7;
   color: #55705f;
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -327,7 +328,7 @@
 }
 
 .profile__prayerEditBtn {
-  border: 1px solid #d8cfa8;
+  border: 1px solid rgba(159, 115, 52, 0.22);
   background: #fffaf0;
   color: #355846;
   border-radius: 999px;
@@ -445,9 +446,9 @@
 .profile__salvationEditBtn {
   margin-top: 24px;
   width: fit-content;
-  border: 1px solid rgba(83, 111, 91, 0.28);
+  border: 1px solid rgba(159, 115, 52, 0.22);
   border-radius: 999px;
-  background: #f7f1e6;
+  background: #f3ede1;
   color: #263b2e;
   padding: 12px 22px;
   font-family: inherit;
@@ -467,6 +468,44 @@
 .profile__salvationEditBtn:active {
   transform: translateY(0);
   box-shadow: 0 8px 18px rgba(38, 59, 46, 0.08);
+}
+
+.profile__state {
+  min-height: 190px;
+  padding: 34px 28px;
+  border-radius: 8px;
+  background: #fffdf8;
+  border: 1px solid rgba(47, 67, 41, 0.1);
+  box-shadow: 0 20px 50px rgba(31, 42, 31, 0.08);
+  text-align: center;
+  display: grid;
+  place-content: center;
+  gap: 8px;
+}
+
+.profile__state--error {
+  background: #fff8f5;
+  border-color: rgba(157, 61, 47, 0.18);
+}
+
+.profile__stateKicker {
+  margin: 0;
+  color: #8f642e;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.profile__state h3 {
+  margin: 0;
+  color: #223024;
+  font-size: clamp(1.4rem, 2.6vw, 1.8rem);
+}
+
+.profile__state p {
+  margin: 0;
+  color: #5f695b;
 }
 
 @media (max-width: 980px) {
@@ -489,7 +528,7 @@
 
   .profile__card {
     padding: 22px;
-    border-radius: 24px;
+    border-radius: 8px;
   }
 
   .profile__card--identity {
@@ -516,8 +555,7 @@
   }
 
   .profile__prayerEditBtn,
-  .profile__editBtn,
-  .profile__back {
+  .profile__editBtn {
     width: 100%;
     justify-content: center;
   }

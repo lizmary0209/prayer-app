@@ -114,7 +114,7 @@ if (!isOpen) return null;
           onClick={closeAndReset}
           aria-label="Close salvation modal"
         >
-          ×
+          x
         </button>
 
         {step === "initial" && (
@@ -221,7 +221,7 @@ if (!isOpen) return null;
 
         {step === "success" && (
           <div className="salvation-modal__success">
-            <p className="salvation-modal__success-icon">✝</p>
+            <p className="salvation-modal__success-icon">Faith</p>
 
             <h2 className="salvation-modal__title">
               Your response has been recorded
