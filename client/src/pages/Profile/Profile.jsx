@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./Profile.css";
 
 import EditProfileModal from "../../components/EditProfileModal/EditProfileModal";
+import AddPrayerModal from "../../components/AddPrayerModal/AddPrayerModal";
 import { getMyPrayers, updateMe } from "../../utils/api";
 
 const PRAYER_CATEGORY_LABELS = {
@@ -24,10 +25,7 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
 
     const [isPrayerEditOpen, setIsPrayerEditOpen] = useState(false);
     const [editingPrayer, setEditingPrayer] = useState(null);
-    const [editingTitle, setEditingTitle] = useState("");
-    const [editingDescription, setEditingDescription] = useState("");
-    const [isUpdatingPrayer, setIsUpdatingPrayer] = useState(false);
-    const [prayerSaveError, setPrayerSaveError] = useState("");
+   
 
     useEffect(() => {
         if (!currentUser) return;
@@ -84,50 +82,40 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
 
     function openPrayerEditModal(prayer) {
         setEditingPrayer(prayer);
-        setEditingTitle(prayer?.title || "");
-        setEditingDescription(prayer?.description || "");
-        setPrayerSaveError("");
         setIsPrayerEditOpen(true);
     }
 
     function closePrayerEditModal() {
         setIsPrayerEditOpen(false);
         setEditingPrayer(null);
-        setEditingTitle("");
-        setEditingDescription("");
-        setPrayerSaveError("");
     }
 
-    async function handleSavePrayerEdit(e) {
-        e.preventDefault();
+async function handleSavePrayerEdit(updatedPrayerData) {
+  if (!editingPrayer?._id) return;
 
-        if (!editingPrayer?._id) return;
+  try {
+    const { updatePrayer } = await import("../../utils/api");
 
-        setIsUpdatingPrayer(true);
-        setPrayerSaveError("");
+    const updated = await updatePrayer(
+      editingPrayer._id,
+      updatedPrayerData
+    );
 
-        try {
-            const { updatePrayer } = await import("../../utils/api");
-            const updated = await updatePrayer(editingPrayer._id, {
-                title: editingTitle,
-                description: editingDescription,
-            });
+    const updatedPrayer = updated?.prayer || updated;
 
-            const updatedPrayer = updated?.prayer || updated;
+    setMyPrayers((prev) =>
+      prev.map((prayer) =>
+        prayer._id === editingPrayer._id
+          ? updatedPrayer
+          : prayer
+      )
+    );
 
-            setMyPrayers((prev) => 
-            prev.map((prayer) =>
-            prayer._id === editingPrayer._id ? updatedPrayer : prayer
-            )
-        );
-
-        closePrayerEditModal();
-        } catch (err) {
-            setPrayerSaveError(err.message || "Failed to update prayer.");
-        } finally {
-            setIsUpdatingPrayer(false);
-        }
-    }
+    closePrayerEditModal();
+  } catch (err) {
+    throw new Error(err.message || "Failed to update prayer.");
+  }
+}
 
     useEffect(() => {
         function handleEsc(e) {
@@ -408,66 +396,15 @@ export default function Profile({ currentUser, onUserUpdate, onEditSalvationJour
                     error={saveError}
                 />
 
-                {isPrayerEditOpen && (
-                    <div className="profile-modal">
-                        <div
-                        className="profile-modal__content">
-                            <button
-                            type="button"
-                            className="profile-modal__close"
-                            onClick={closePrayerEditModal}
-                            >
-                                x
-                            </button>
+                <AddPrayerModal
+                isOpen={isPrayerEditOpen}
+                onClose={closePrayerEditModal}
+                onSubmit={handleSavePrayerEdit}
+                seed={editingPrayer}
+                mode="edit"
+                />
 
-                            <h2 className="profile-modal__title">Edit Prayer</h2>
-
-                            <form className="profile-modal__form" onSubmit={handleSavePrayerEdit}>
-                                <label className="profile-modal__label">
-                                    Title
-                                    <input
-                                    className="profile-modal__input"
-                                    type="text"
-                                    value={editingTitle}
-                                    onChange={(e) => setEditingTitle(e.target.value)}
-                                    />
-                                </label>
-
-                                <label className="profile-modal__label">
-                                    Description
-                                    <textarea
-                                    className="profile-modal__textarea"
-                                    rows="5"
-                                    value={editingDescription}
-                                    onChange={(e) => setEditingDescription(e.target.value)}
-                                    />
-                                </label>
-
-                                {prayerSaveError ? (
-                                    <p className="profile-modal__error">{prayerSaveError}</p>
-                                ) : null}
-
-                                <div className="profile-modal__actions">
-                                    <button
-                                    type="button"
-                                    className="profile-modal__secondary"
-                                    onClick={closePrayerEditModal}
-                                    >
-                                        Cancel
-                                    </button>
-
-                                    <button
-                                    type="submit"
-                                    className="profile-modal__primary"
-                                    disabled={isUpdatingPrayer}
-                                    >
-                                        {isUpdatingPrayer ? "Saving..." : "Save Changes"}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
+                            
             </div>
         </main>
     );

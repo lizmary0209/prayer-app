@@ -10,9 +10,9 @@ router.patch("/me", authMiddleware, updateMe);
 
 router.get("/me/prayers", authMiddleware, async (req, res) => {
   try {
-    const prayers = await Prayer.find({ createdBy: req.user.id }).sort({
-      createdAt: -1,
-    });
+    const prayers = await Prayer.find({ createdBy: req.user.id })
+    .populate("createdBy", "displayName profilePic")
+    .sort({ createdAt: -1 });
 
     res.json({ prayers });
   } catch (err) {

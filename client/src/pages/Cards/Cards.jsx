@@ -439,6 +439,7 @@ const getCategoryMatches = (categoryValue) => {
               const ownerId = card.createdBy?._id || card.createdBy?.id;
               const isOwner = ownerId === currentUserId;
               const categoryLabel = getCategoryLabel(getCoverCategory(card));
+              const isPrivate = card.visibility === "private";
 
               return (
                 <li
@@ -469,6 +470,12 @@ const getCategoryMatches = (categoryValue) => {
                             <h3 className="cards__item-title">{card.title}</h3>
                             <div className="cards__meta" aria-label="Prayer details">
                               <span className="cards__meta-pill">{categoryLabel}</span>
+
+                              {isPrivate && (
+                                <span className="cards__privacy-pill">🔒 Private</span>
+                              )}
+
+                              
                               {ref && <span className="cards__meta-ref">{ref}</span>}
                             </div>
                           </div>
@@ -544,6 +551,11 @@ const getCategoryMatches = (categoryValue) => {
                             <h3 className="cards__item-title">{card.title}</h3>
                             <div className="cards__meta" aria-label="Prayer details">
                               <span className="cards__meta-pill">{categoryLabel}</span>
+
+                              {isPrivate && (
+                                <span className="cards__privacy-pill">🔒 Private</span>
+                              )}
+
                               {ref && <span className="cards__meta-ref">{ref}</span>}
                             </div>
                           </div>

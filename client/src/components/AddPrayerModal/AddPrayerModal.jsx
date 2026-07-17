@@ -17,11 +17,16 @@ export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode =
   const initialScripture = useMemo(() => seed?.scripture || "", [seed]);
   const initialDescription = useMemo(() => seed?.description || "", [seed]);
   const initialCategory = useMemo(() => seed?.category || "neutral", [seed]);
+  const initialVisibility = useMemo(
+    () => seed?.visibility || "public",
+    [seed]
+  );
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [scripture, setScripture] = useState("");
   const [category, setCategory] = useState("neutral");
+  const [visibility, setVisibility] =useState("public");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -35,7 +40,8 @@ export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode =
     setCategory(initialCategory);
     setError("");
     setIsSaving(false);
-  }, [isOpen, initialTitle, initialDescription, initialScripture, initialCategory]);
+    setVisibility(initialVisibility);
+  }, [isOpen, initialTitle, initialDescription, initialScripture, initialCategory, initialVisibility]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -51,6 +57,7 @@ export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode =
       description: description.trim(),
       scripture: scripture.trim(),
       category,
+      visibility,
     };
 
     setIsSaving(true);
@@ -123,6 +130,22 @@ export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode =
               {option.label}
             </option>
           ))}
+        </select>
+
+        <label className="add-prayer__label">Who can see this prayer?</label>
+
+        <select 
+        className="add-prayer__input"
+        value={visibility}
+        onChange={(e) => setVisibility(e.target.value)}
+        >
+          <option value="public">
+            Public - Visible on the Prayer Wall
+          </option>
+
+          <option value="private">
+            Private - Visible only on your profile
+          </option>
         </select>
 
         <label className="add-prayer__label">Scripture (optional)</label>

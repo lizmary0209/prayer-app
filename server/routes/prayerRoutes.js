@@ -9,7 +9,7 @@ router.get("/protected", authMiddleware, (req, res) => {
 
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const { title, description, scripture, category } = req.body;
+    const { title, description, scripture, category, visibility } = req.body;
 
     if (!title || !description) {
       return res
@@ -22,6 +22,7 @@ router.post("/", authMiddleware, async (req, res) => {
       description,
       scripture: scripture || "",
       category: category || "neutral",
+      visibility: visibility || "public",
       createdBy: req.user.id,
     });
 
@@ -39,7 +40,12 @@ router.post("/", authMiddleware, async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const prayers = await Prayer.find()
+    const prayers = await Prayer.find({
+      $or: [
+        { visibility: "public" },
+        { visibility: { $exists: false } },
+      ],
+    })
       .populate("createdBy", "displayName profilePic")
       .sort({ createdAt: -1 });
 
@@ -55,7 +61,10 @@ router.get("/", async (req, res) => {
 
 router.patch("/:id", authMiddleware, async (req, res) => {
   try {
-    const { title, description, scripture, category } = req.body;
+    const { title, description, scripture, category, visibility,
+      } = req.body;
+
+      
     const prayer = await Prayer.findById(req.params.id);
 
     if (!prayer) {
@@ -70,6 +79,7 @@ router.patch("/:id", authMiddleware, async (req, res) => {
     if (description !== undefined) prayer.description = description;
     if (scripture !== undefined) prayer.scripture = scripture;
     if (category !== undefined) prayer.category = category;
+    if (visibility !== undefined) prayer.visibility = visibility;
 
     await prayer.save();
     await prayer.populate("createdBy", "displayName profilePic");
