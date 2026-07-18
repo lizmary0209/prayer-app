@@ -361,6 +361,17 @@ async function handleSavePrayerEdit(updatedPrayerData) {
                                                     {PRAYER_CATEGORY_LABELS[p.category] ||
                                                         PRAYER_CATEGORY_LABELS.neutral}
                                                 </span>
+
+                                               <span
+                                               className={`profile__privacyBadge ${
+                                            p.visibility === "private"
+                                            ? "profile__privacyBadge--private"
+                                            : "profile__privacyBadge--public"   
+                                            }`}
+                                            >
+                                                {p.visibility === "private" ? "🔒 Private" : "🌍 Public"}
+                                                </span>
+
                                                 {p.scripture ? <span>{p.scripture}</span> : null}
                                             </div>
                                         </div>
