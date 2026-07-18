@@ -17,6 +17,15 @@ const PrayerSchema = new mongoose.Schema(
       default: "public",
     },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
+    
+    savedBy: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: [],
+  },
+],
+
     prayedCount: { type: Number, default: 0 },
     comments: [
       {
@@ -28,5 +37,6 @@ const PrayerSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
 
 module.exports = mongoose.model("Prayer", PrayerSchema);

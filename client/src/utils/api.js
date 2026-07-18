@@ -88,3 +88,9 @@ export function getSalvationCount() {
     method: "GET",
   });
 }
+
+export function toggleSavePrayer(id) {
+  return request(`/api/prayers/${id}/save`, {
+    method: "POST",
+  });
+}

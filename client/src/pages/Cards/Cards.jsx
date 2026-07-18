@@ -271,6 +271,36 @@ const getCategoryMatches = (categoryValue) => {
     }
   };
 
+  const handleSave = async (prayerId) => {
+  try {
+    if (!prayerId) return;
+
+    const token = localStorage.getItem("jwt");
+
+    if (!token) {
+      alert("Please log in to save a prayer.");
+      return;
+    }
+
+    const data = await request(`/api/prayers/${prayerId}/save`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+
+    setCards((prev) =>
+      prev.map((card) =>
+        card._id === prayerId ? data.prayer : card
+      )
+    );
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Could not save prayer");
+  }
+};
+
   const handlePray = async (prayerId) => {
     try {
       if (!prayerId) return;
@@ -432,14 +462,18 @@ const getCategoryMatches = (categoryValue) => {
               const ref = card.scripture;
               const v = verseState[card._id] || {};
               const verseBtnLabel = v.isOpen ? "Hide Verse" : "View Verse";
-              const likesCount = card.likes?.length || 0;
-              const prayedCount = card.prayedCount || 0;
-              const isOpen = openCardId === card._id;
-              const currentUserId = currentUser?._id || currentUser?.id;
-              const ownerId = card.createdBy?._id || card.createdBy?.id;
-              const isOwner = ownerId === currentUserId;
-              const categoryLabel = getCategoryLabel(getCoverCategory(card));
-              const isPrivate = card.visibility === "private";
+            const likesCount = card.likes?.length || 0;
+const prayedCount = card.prayedCount || 0;
+const isOpen = openCardId === card._id;
+const currentUserId = currentUser?._id || currentUser?.id;
+const savedCount = card.savedBy?.length || 0;
+const isSaved = card.savedBy?.some(
+  (id) => id.toString() === currentUserId?.toString()
+);
+const ownerId = card.createdBy?._id || card.createdBy?.id;
+const isOwner = ownerId === currentUserId;
+const categoryLabel = getCategoryLabel(getCoverCategory(card));
+const isPrivate = card.visibility === "private";
 
               return (
                 <li
@@ -507,6 +541,19 @@ const getCategoryMatches = (categoryValue) => {
                             </button>
 
                             <button
+                            className={`cards__btn ${isSaved ? "cards__btn--saved" : ""}`}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSave(card._id);
+                            }}
+                            >
+
+                              {isSaved ? "⭐ Saved" : "☆ Save"}
+                            </button>
+                            
+
+                            <button
                               className="cards__btn cards__btn--pray"
                               type="button"
                               onClick={(e) => {
@@ -532,10 +579,10 @@ const getCategoryMatches = (categoryValue) => {
                           </div>
 
                           <span className="cards__likes">
-                            {likesCount} like{likesCount === 1 ? "" : "s"} -{" "}
-                            {prayedCount} prayer
-                            {prayedCount === 1 ? "" : "s"}
-                          </span>
+  {likesCount} like{likesCount === 1 ? "" : "s"} -{" "}
+  {prayedCount} prayer{prayedCount === 1 ? "" : "s"} -{" "}
+  {savedCount} save{savedCount === 1 ? "" : "s"}
+</span>
                         </div>
 
                         <div className="cards__hint">
@@ -614,6 +661,19 @@ const getCategoryMatches = (categoryValue) => {
                             </button>
 
                             <button
+                            className={`cards__btn ${isSaved ? "cards__btn--saved" : ""}`}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSave(card._id);
+                            }}
+                            >
+
+                              {isSaved ? "⭐ Saved" : "☆ Save"}
+                            </button>
+                            
+
+                            <button
                               className="cards__btn cards__btn--pray"
                               type="button"
                               onClick={(e) => {
@@ -639,10 +699,10 @@ const getCategoryMatches = (categoryValue) => {
                           </div>
 
                           <span className="cards__likes">
-                            {likesCount} like{likesCount === 1 ? "" : "s"} -{" "}
-                            {prayedCount} prayer
-                            {prayedCount === 1 ? "" : "s"}
-                          </span>
+  {likesCount} like{likesCount === 1 ? "" : "s"} -{" "}
+  {prayedCount} prayer{prayedCount === 1 ? "" : "s"} -{" "}
+  {savedCount} save{savedCount === 1 ? "" : "s"}
+</span>
                         </div>
 
                         <div className="cards__hint">Tap to go back</div>

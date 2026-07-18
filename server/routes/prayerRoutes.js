@@ -166,4 +166,53 @@ router.post("/:id/like", authMiddleware, async (req, res) => {
   }
 });
 
+router.post("/:id/save", authMiddleware, async (req, res) => {
+  try {
+    const prayer = await Prayer.findById(req.params.id);
+
+    if (!prayer) {
+      return res.status(404).json({ message: "Prayer not found" });
+    }
+
+    const prayerVisibility = prayer.visibility || "public";
+
+    if (prayerVisibility !== "public") {
+      return res.status(403).json({
+        message: "Only public prayers can be saved.",
+      });
+    }
+
+    if (!Array.isArray(prayer.savedBy)) {
+      prayer.savedBy = [];
+    }
+
+    const userId = req.user.id;
+
+    const alreadySaved = prayer.savedBy.some(
+      (id) => id.toString() === userId.toString()
+    );
+
+    if (alreadySaved) {
+      prayer.savedBy = prayer.savedBy.filter(
+        (id) => id.toString() !== userId.toString()
+      );
+    } else {
+      prayer.savedBy.push(userId);
+    }
+
+    await prayer.save();
+    await prayer.populate("createdBy", "displayName profilePic");
+
+    res.status(200).json({
+      message: alreadySaved ? "Prayer removed from saved prayers" : "Prayer saved",
+      prayer,
+      isSaved: !alreadySaved,
+    });
+  } catch (error) {
+    console.error("savePrayer error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 module.exports = router;
