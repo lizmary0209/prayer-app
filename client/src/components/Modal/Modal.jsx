@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import "./Modal.css";
 
 export default function Modal({
@@ -9,6 +9,8 @@ export default function Modal({
     footer,
     size = "md",
 }) {
+    const titleId = useId();
+
     useEffect(() => {
         if (!isOpen) return;
 
@@ -32,14 +34,22 @@ export default function Modal({
          className="modal" 
          role="dialog"
          aria-modal="true"
+         aria-labelledby={title ? titleId : undefined}
           >
             <div 
             className={`modal__content modal__content--${size}`}
             >
                 <div className="modal__header">
-                    {title ? <h2 className="modal__title">{title}</h2> : <div />}
-                    <button className="modal__close" type="button" onClick={onClose} aria-label="Close">
-                        x
+                    {title ? (
+                        <h2 className="modal__title" id={titleId}>{title}</h2>
+                    ) : <div />}
+                   <button
+                        className="modal__close"
+                        type="button"
+                        onClick={onClose}
+                        aria-label="Close"
+                    >
+                        &times;
                     </button>
                 </div>
 

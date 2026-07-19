@@ -111,16 +111,18 @@ export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode =
       }
     >
       <form id="add-prayer-form" className="add-prayer" onSubmit={handleSubmit}>
-        <label className="add-prayer__label">Title</label>
+        <label className="add-prayer__label" htmlFor="prayer-title">Title</label>
         <input
+          id="prayer-title"
           className="add-prayer__input"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. Peace in my heart"
         />
 
-        <label className="add-prayer__label"> Prayer Theme</label>
+        <label className="add-prayer__label" htmlFor="prayer-theme"> Prayer Theme</label>
         <select
+        id="prayer-theme"
         className="add-prayer__input"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
@@ -132,9 +134,10 @@ export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode =
           ))}
         </select>
 
-        <label className="add-prayer__label">Who can see this prayer?</label>
+        <label className="add-prayer__label" htmlFor="prayer-visibility">Who can see this prayer?</label>
 
         <select 
+        id="prayer-visibility"
         className="add-prayer__input"
         value={visibility}
         onChange={(e) => setVisibility(e.target.value)}
@@ -148,16 +151,18 @@ export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode =
           </option>
         </select>
 
-        <label className="add-prayer__label">Scripture (optional)</label>
+        <label className="add-prayer__label" htmlFor="prayer-scripture">Scripture (optional)</label>
         <input
+          id="prayer-scripture"
           className="add-prayer__input"
           value={scripture}
           onChange={(e) => setScripture(e.target.value)}
           placeholder="e.g. Philippians 4:6-7"
         />
 
-        <label className="add-prayer__label">Prayer</label>
+        <label className="add-prayer__label" htmlFor="prayer-description">Prayer</label>
         <textarea
+          id="prayer-description"
           className="add-prayer__textarea"
           value={description}
           onChange={(e) => setDescription(e.target.value)}

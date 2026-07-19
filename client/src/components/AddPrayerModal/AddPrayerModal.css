@@ -37,6 +37,12 @@
     box-shadow: 0 0 0 4px rgba(201, 173, 106, 0.25);
 }
 
+.add-prayer__input:focus-visible,
+.add-prayer__textarea:focus-visible {
+    border-color: rgba(176, 141, 69, 0.7);
+    box-shadow: 0 0 0 4px rgba(201, 173, 106, 0.25);
+}
+
 .add-prayer__error {
     margin: 10px 0 0;
     color: var(--brown-900);
@@ -81,4 +87,9 @@
 .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+.btn:focus-visible {
+    outline: 3px solid rgba(91, 111, 71, 0.35);
+    outline-offset: 2px;
 }
