@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
+
 import Header from "./components/Navigation/Header";
 import Cards from "./pages/Cards/Cards";
 import AddPrayerModal from "./components/AddPrayerModal/AddPrayerModal";
@@ -166,6 +168,16 @@ async function handleSalvationSuccess(data) {
   />
   }
  />
+
+ <Route
+ path="/admin"
+ element={
+currentUser?.role === "admin"
+? <AdminDashboard />
+: <Navigate to="/" replace />
+ }
+/>
+
 
   <Route
     path="/cards"

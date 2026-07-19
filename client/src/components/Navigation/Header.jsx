@@ -54,6 +54,12 @@ export default function Header({
               Profile
             </Link>
           )}
+
+          {currentUser?.role === "admin" && (
+            <Link className="header__link" to="/admin">
+              Admin
+            </Link>
+          )}
         </nav>
 
         <nav className="header__actions" aria-label="Account actions">

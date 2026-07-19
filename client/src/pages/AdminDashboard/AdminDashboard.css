@@ -1,0 +1,65 @@
+.admin {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+}
+
+.admin__hero {
+    margin-bottom: 40px;
+}
+
+.admin__title {
+    font-size: 2.5rem;
+    color: #233327;
+    margin-bottom: 10px;
+}
+
+.admin__subtitle {
+    color: #647067;
+    font-size: 1.05rem;
+}
+
+.admin__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.06);
+    border: 1px solid rgba(34,51,39,.08);
+}
+
+.stat-card h2 {
+    font-size: 1rem;
+    color: #647067;
+    margin-bottom: 16px;
+}
+
+.stat-card__number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #486b52;
+}
+
+.admin__coming-soon {
+    background: white;
+    border-radius: 18px;
+    padding: 32px;
+    border: 1px solid rgba(34,51,39,.08);
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+}
+
+.admin__coming-soon h2 {
+    margin-bottom: 20px;
+    color: #233327;
+}
+
+.admin__coming-soon ul {
+    padding-left: 20px;
+    line-height: 2;
+}
