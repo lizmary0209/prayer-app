@@ -1,3 +1,22 @@
 {
-    "editor.suggest.selectionMode": "never"
+    "editor.suggest.selectionMode": "never",
+    "editor.hover.delay": 2000,
+    "editor.hover.above": false,
+    "editor.hover.enabled": "off",
+    "editor.hover.showLongLineWarning": false,
+    "editor.hover.sticky": false,
+    "workbench.hover.delay": 2000,
+    "workbench.hover.reducedDelay": 2000,
+    "workbench.sash.hoverDelay": 2000,
+    "accessibility.verbosity.hover": false,
+    "css.hover.documentation": false,
+    "css.hover.references": false,
+    "less.hover.documentation": false,
+    "less.hover.references": false,
+    "scss.hover.documentation": false,
+    "scss.hover.references": false,
+    "html.hover.documentation": false,
+    "html.hover.references": false,
+    "js/ts.hover.maximumLength": 2000,
+    "accessibility.verbosity.inlineCompletions": false
 }

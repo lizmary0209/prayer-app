@@ -1,6 +1,25 @@
+import { useEffect, useState } from "react";
 import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
+    const [stats, setStats] = useState({
+        totalUsers: 0,
+        totalPrayers: 0,
+        salvationDecisions: 0,
+        prayerResponses: 0,
+    });
+
+    const fetchStats = async () => {
+        const response = await fetch("/api/admin/stats");
+        const data = await response.json();
+        setStats(data);
+    };
+
+    useEffect(() => {
+        console.log("Admin Dashboard loaded!");
+    }, []);
+
+
     return (
         <main className="admin">
             <section className="admin__hero">
