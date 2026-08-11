@@ -106,3 +106,12 @@ export function getRecentAdminPrayers() {
     method: "GET",
   });
 }
+
+export function getAdminUsers() {
+  return request("/api/admin/users", {
+    method: "GET",
+  });
+}
+
+
+

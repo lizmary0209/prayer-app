@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
      getAdminStats,
     getRecentAdminPrayers,
+    getAdminUsers,
  } from "../../utils/api";
 import "./AdminDashboard.css";
 
@@ -15,6 +16,7 @@ export default function AdminDashboard() {
     });
 
     const [recentPrayers, setRecentPrayers] = useState([]);
+    const [users, setUsers] = useState([]);
 
    const fetchStats = async () => {
     const data = await getAdminStats();
@@ -26,9 +28,15 @@ export default function AdminDashboard() {
     setRecentPrayers(Array.isArray(data?.prayers) ? data.prayers : []);
    };
 
+   const fetchUsers = async () => {
+    const data = await getAdminUsers();
+    setUsers(Array.isArray(data?.users) ? data.users : []);
+   };
+
     useEffect(() => {
         fetchStats();
         fetchRecentPrayers();
+        fetchUsers();
     }, []);
 
 
@@ -102,6 +110,54 @@ export default function AdminDashboard() {
                             ))
                         )}
                     </div>
+            </section>
+
+            <section className="admin__members">
+                <div className="admin__section-header">
+                    <div>
+                                <p className="admin__section-eyebrow">Community</p>
+                        <h2>Community Members</h2>
+                    </div>
+                </div>
+
+                
+                        <div className="admin__member-list">
+                            {users.length === 0 ? (
+                                <p>No community members yet.</p>
+                            ) : (
+                                users.map((user) => (
+                                    <article key={user._id} className="admin__member-card">
+                                        <div>
+                                            <h3>{user.displayName || "Selah Member"}</h3>
+                                            <p>{user.email}</p>
+                                        </div>
+
+                                        <div className="admin__member-meta">
+                                            <span>{user.role === "admin" ? "Admin" : "Member"}</span>
+
+                                            <span>
+                                                {user.salvationStatus === "saved_today"
+                                                ? "Saved Today"
+                                            : user.salvationStatus === "already_saved"
+                                            ? "Already Saved"
+                                        : user.salvationStatus === "exploring"
+                                        ? "Exploring"
+                                    : "Not Recorded"}
+                                            </span>
+
+                                            <span>
+                                                Joined{" "}
+                                                {new Date(user.createdAt).toLocaleDateString("en-US", {
+                                                    month: "short",
+                                                    day: "numeric",
+                                                    year: "numeric",
+                                                })}
+                                            </span>
+                                        </div>
+                                    </article>
+                                ))
+                            )}
+                        </div>
             </section>
         </main>
     );

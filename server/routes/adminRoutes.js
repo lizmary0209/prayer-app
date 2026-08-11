@@ -88,4 +88,29 @@ router.get(
     }
 );
 
+router.get(
+    "/users",
+    authMiddleware,
+    adminMiddleware,
+    async (req, res) => {
+        try {
+            const users = await User.find()
+            .select(
+                "displayName email profilePic role salvationStatus salvationDate salvationDateEstimated createdAt "
+            )
+            .sort({ createdAt: -1 });
+
+            res.status(200).json({
+                users,
+            });
+        } catch (error) {
+            console.error("Admin users error:", error);
+
+            res.status(500).json({
+                message: "Unable to load users.",
+            });
+        }
+    }
+);
+
 module.exports = router;

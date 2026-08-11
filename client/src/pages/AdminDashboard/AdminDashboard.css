@@ -1,149 +1,229 @@
 .admin {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 48px 24px 80px;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
 }
 
 .admin__hero {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 
 .admin__title {
-    font-size: 2.5rem;
-    color: #233327;
-    margin-bottom: 10px;
+  font-size: 2.5rem;
+  color: #233327;
+  margin-bottom: 10px;
 }
 
 .admin__subtitle {
-    color: #647067;
-    font-size: 1.05rem;
+  color: #647067;
+  font-size: 1.05rem;
 }
 
 .admin__stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 24px;
-    margin-bottom: 48px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
 }
 
 .stat-card {
-    background: white;
-    border-radius: 18px;
-    padding: 28px;
-    box-shadow: 0 8px 25px rgba(0,0,0,.06);
-    border: 1px solid rgba(34,51,39,.08);
+  background: white;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, .06);
+  border: 1px solid rgba(34, 51, 39, .08);
 }
 
 .stat-card h2 {
-    font-size: 1rem;
-    color: #647067;
-    margin-bottom: 16px;
+  font-size: 1rem;
+  color: #647067;
+  margin-bottom: 16px;
 }
 
 .stat-card__number {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #486b52;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #486b52;
 }
+
+/* Recent Prayer Requests */
 
 .admin__recent {
-    background: white;
-    border-radius: 18px;
-    padding: 32px;
-    border: 1px solid rgba(34, 51, 39, .08);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, .05);
+  background: white;
+  border-radius: 18px;
+  padding: 32px;
+  border: 1px solid rgba(34, 51, 39, .08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, .05);
 }
 
+/* Community Members */
+
+.admin__members {
+  margin-top: 32px;
+  background: white;
+  border-radius: 18px;
+  padding: 32px;
+  border: 1px solid rgba(34, 51, 39, .08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, .05);
+}
+
+/* Section Headers */
+
 .admin__section-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
 }
 
 .admin__section-eyebrow {
-    margin: 0 0 6px;
-    color: #7b8d80;
-    font-size: .8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .08em;
+  margin: 0 0 6px;
+  color: #7b8d80;
+  font-size: .8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
 
 .admin__section-header h2 {
-    margin: 0;
-    color: #233327;
-    font-size: 1.6rem;
+  margin: 0;
+  color: #233327;
+  font-size: 1.6rem;
 }
 
+/* Prayer List */
+
 .admin__prayer-list {
-    display: grid;
-    gap: 16px;
+  display: grid;
+  gap: 16px;
 }
 
 .admin__prayer-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 24px;
-    padding: 22px 24px;
-    background: #f8faf8;
-    border: 1px solid rgba(34, 51, 39, .08);
-    border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 24px;
+  background: #f8faf8;
+  border: 1px solid rgba(34, 51, 39, .08);
+  border-radius: 14px;
 }
 
 .admin__prayer-card h3 {
-    margin: 0 0 8px;
-    color: #233327;
-    font-size: 1.05rem;
+  margin: 0 0 8px;
+  color: #233327;
+  font-size: 1.05rem;
 }
 
 .admin__prayer-card p {
-    margin: 0;
-    color: #647067;
-    line-height: 1.6;
+  margin: 0;
+  color: #647067;
+  line-height: 1.6;
 }
 
 .admin__prayer-meta {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-    flex-shrink: 0;
-    color: #486b52;
-    font-size: .9rem;
-    font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+  color: #486b52;
+  font-size: .9rem;
+  font-weight: 600;
 }
 
 .admin__needs-prayer {
-    display: inline-block;
-    padding: 6px 10px;
-    border-radius: 999px;
-    background: #f4eee2;
-    color: #745c32;
-    font-size: .75rem;
-    font-weight: 700;
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f4eee2;
+  color: #745c32;
+  font-size: .75rem;
+  font-weight: 700;
 }
 
+/* Member List */
+
+.admin__member-list {
+  display: grid;
+  gap: 16px;
+}
+
+.admin__member-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 24px;
+  background: #f8faf8;
+  border: 1px solid rgba(34, 51, 39, .08);
+  border-radius: 14px;
+}
+
+.admin__member-card h3 {
+  margin: 0 0 8px;
+  color: #233327;
+  font-size: 1.05rem;
+}
+
+.admin__member-card p {
+  margin: 0;
+  color: #647067;
+  line-height: 1.6;
+}
+
+.admin__member-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #486b52;
+  font-size: .85rem;
+}
+
+.admin__member-meta span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef4ef;
+  border: 1px solid rgba(34, 51, 39, .08);
+  white-space: nowrap;
+}
+
+/* Mobile */
+
 @media (max-width: 700px) {
-    .admin {
-        padding: 32px 16px 60px;
-    }
+  .admin {
+    padding: 32px 16px 60px;
+  }
 
-    .admin__title {
-        font-size: 2rem;
-    }
+  .admin__title {
+    font-size: 2rem;
+  }
 
-    .admin__recent {
-        padding: 22px;
-    }
+  .admin__recent {
+    padding: 22px;
+  }
 
-    .admin__prayer-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .admin__members {
+    padding: 22px;
+  }
 
-    .admin__prayer-meta {
-        align-items: flex-start;
-    }
+  .admin__member-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin__member-meta {
+    justify-content: flex-start;
+  }
+
+  .admin__prayer-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin__prayer-meta {
+    align-items: flex-start;
+  }
 }
