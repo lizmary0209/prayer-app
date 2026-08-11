@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { getAdminStats } from "../../utils/api";
+import {
+     getAdminStats,
+    getRecentAdminPrayers,
+ } from "../../utils/api";
 import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
@@ -11,13 +14,21 @@ export default function AdminDashboard() {
         awaitingFirstPrayer: 0,
     });
 
+    const [recentPrayers, setRecentPrayers] = useState([]);
+
    const fetchStats = async () => {
     const data = await getAdminStats();
     setStats(data);
    }
 
+   const fetchRecentPrayers = async () => {
+    const data = await getRecentAdminPrayers();
+    setRecentPrayers(Array.isArray(data?.prayers) ? data.prayers : []);
+   };
+
     useEffect(() => {
         fetchStats();
+        fetchRecentPrayers();
     }, []);
 
 
@@ -56,15 +67,41 @@ export default function AdminDashboard() {
                 </article>
             </section>
 
-            <section className="admin__coming-soon">
-                <h2>Coming Next</h2>
+            <section className="admin__recent">
+                <div className="admin__section-header">
+                    <div>
+                    <p className="admin__section-eyebrow">Community Activity</p>
+                    <h2>Recent Prayer Requests</h2>
+                    </div>
+                    </div>
 
-                <ul>
-                    <li>Recent Prayer Requests</li>
-                    <li>Recent Members</li>
-                    <li>Recent Salvation Decisions</li>
-                    <li>Community Analytics</li>
-                </ul>
+                    <div className="admin__prayer-list">
+                        {recentPrayers.length === 0 ? (
+                            <p>No public prayer requests yet.</p>
+                        ): (
+                            recentPrayers.map((prayer) => (
+                                <article key={prayer._id} className="admin__prayer-card">
+                                    <div>
+                                        <h3>{prayer.title}</h3>
+                                        <p>{prayer.description}</p>
+                                    </div>
+
+                                    <div className="admin__prayer-meta">
+                                        <span>
+                                            🙏🏽 {prayer.prayedCount || 0}{" "}
+                                            {prayer.prayedCount === 1 ? "person prayed" : "people prayed"}
+                                        </span>
+
+                                        {prayer.prayedCount === 0 ? (
+                                            <span className="admin__needs-prayer">
+                                                Needs First Prayer
+                                            </span>
+                                        ) : null}
+                                    </div>
+                                </article>
+                            ))
+                        )}
+                    </div>
             </section>
         </main>
     );

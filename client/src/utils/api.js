@@ -100,3 +100,9 @@ export function getAdminStats() {
     method: "GET",
   });
 }
+
+export function getRecentAdminPrayers() {
+  return request("/api/admin/recent-prayers", {
+    method: "GET",
+  });
+}

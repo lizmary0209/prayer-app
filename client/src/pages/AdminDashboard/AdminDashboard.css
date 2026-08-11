@@ -46,20 +46,104 @@
     color: #486b52;
 }
 
-.admin__coming-soon {
+.admin__recent {
     background: white;
     border-radius: 18px;
     padding: 32px;
-    border: 1px solid rgba(34,51,39,.08);
-    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+    border: 1px solid rgba(34, 51, 39, .08);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .05);
 }
 
-.admin__coming-soon h2 {
-    margin-bottom: 20px;
+.admin__section-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 28px;
+}
+
+.admin__section-eyebrow {
+    margin: 0 0 6px;
+    color: #7b8d80;
+    font-size: .8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+
+.admin__section-header h2 {
+    margin: 0;
     color: #233327;
+    font-size: 1.6rem;
 }
 
-.admin__coming-soon ul {
-    padding-left: 20px;
-    line-height: 2;
+.admin__prayer-list {
+    display: grid;
+    gap: 16px;
+}
+
+.admin__prayer-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 22px 24px;
+    background: #f8faf8;
+    border: 1px solid rgba(34, 51, 39, .08);
+    border-radius: 14px;
+}
+
+.admin__prayer-card h3 {
+    margin: 0 0 8px;
+    color: #233327;
+    font-size: 1.05rem;
+}
+
+.admin__prayer-card p {
+    margin: 0;
+    color: #647067;
+    line-height: 1.6;
+}
+
+.admin__prayer-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+    color: #486b52;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.admin__needs-prayer {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #f4eee2;
+    color: #745c32;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+@media (max-width: 700px) {
+    .admin {
+        padding: 32px 16px 60px;
+    }
+
+    .admin__title {
+        font-size: 2rem;
+    }
+
+    .admin__recent {
+        padding: 22px;
+    }
+
+    .admin__prayer-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .admin__prayer-meta {
+        align-items: flex-start;
+    }
 }

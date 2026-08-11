@@ -63,4 +63,29 @@ router.get(
     }
 );
 
+router.get(
+    "/recent-prayers",
+    authMiddleware,
+    adminMiddleware,
+    async (req, res) => {
+        try {
+            const recentPrayers = await Prayer.find({
+                visibility: "public",
+            })
+            .sort({ createdAt: -1 })
+            .limit(5);
+
+            res.status(200).json({
+                prayers: recentPrayers,
+            });
+        } catch (error) {
+            console.error("Recent prayers error:", error);
+
+            res.status(500).json({
+                message: "Unable to load recent prayers.",
+            });
+        }
+    }
+);
+
 module.exports = router;
