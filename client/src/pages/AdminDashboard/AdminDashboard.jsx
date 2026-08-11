@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getAdminStats } from "../../utils/api";
 import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
@@ -9,14 +10,13 @@ export default function AdminDashboard() {
         prayerResponses: 0,
     });
 
-    const fetchStats = async () => {
-        const response = await fetch("/api/admin/stats");
-        const data = await response.json();
-        setStats(data);
-    };
+   const fetchStats = async () => {
+    const data = await getAdminStats();
+    setStats(data);
+   }
 
     useEffect(() => {
-        console.log("Admin Dashboard loaded!");
+        fetchStats();
     }, []);
 
 
@@ -31,22 +31,22 @@ export default function AdminDashboard() {
             <section className="admin__stats">
                 <article className="stat-card">
                     <h2>Total Users</h2>
-                    <p className="stat-card__number">--</p>
+                    <p className="stat-card__number">{stats.totalUsers}</p>
                 </article>
 
                 <article className="stat-card">
                     <h2>Prayer Requests</h2>
-                    <p className="stat-card__number">--</p>
+                    <p className="stat-card__number">{stats.totalPrayers}</p>
                 </article>
 
                 <article className="stat-card">
                     <h2>Salvation Decisions</h2>
-                    <p className="stat-card__number">--</p>
+                    <p className="stat-card__number">{stats.salvationDecisions}</p>
                 </article>
 
                 <article className="stat-card">
                     <h2>Prayer Responses</h2>
-                    <p className="stat-card__number">--</p>
+                    <p className="stat-card__number">{stats.prayerResponses}</p>
                 </article>
             </section>
 

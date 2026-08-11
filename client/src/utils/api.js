@@ -94,3 +94,9 @@ export function toggleSavePrayer(id) {
     method: "POST",
   });
 }
+
+export function getAdminStats() {
+  return request("/api/admin/stats", {
+    method: "GET",
+  });
+}
