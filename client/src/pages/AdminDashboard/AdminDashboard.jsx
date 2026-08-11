@@ -8,6 +8,7 @@ export default function AdminDashboard() {
         totalPrayers: 0,
         salvationDecisions: 0,
         prayerResponses: 0,
+        awaitingFirstPrayer: 0,
     });
 
    const fetchStats = async () => {
@@ -47,6 +48,11 @@ export default function AdminDashboard() {
                 <article className="stat-card">
                     <h2>Prayer Responses</h2>
                     <p className="stat-card__number">{stats.prayerResponses}</p>
+                </article>
+
+                <article className="stat-card">
+                    <h2>Awaiting First Prayer</h2>
+                    <p className="stat-card__number">{stats.awaitingFirstPrayer}</p>
                 </article>
             </section>
 

@@ -18,6 +18,7 @@ router.get(
             totalPrayers,
             salvationDecisions,
             prayerResponseResult,
+            awaitingFirstPrayer,
         ] = await Promise.all([
             User.countDocuments(),
             Prayer.countDocuments(),
@@ -34,6 +35,10 @@ router.get(
                     },
                 },
             ]),
+            Prayer.countDocuments({
+                visibility: "public",
+                prayedCount: 0,
+            }),
         ]);
 
         const prayerResponses =
@@ -46,6 +51,7 @@ router.get(
             totalPrayers,
             salvationDecisions,
             prayerResponses,
+            awaitingFirstPrayer,
         });
      } catch (error) {
         console.error("Admin statistics error:", error);
