@@ -34,6 +34,24 @@
   border: 1px solid rgba(34, 51, 39, .08);
 }
 
+.stat-card--clickable {
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+}
+
+.stat-crad--clickable:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .09);
+}
+
+.stat-card--clickable:focus-visible {
+  outline: 3px solid rgba(72, 107, 82, .35);
+  outline-offset: 3px;
+}
+
 .stat-card h2 {
   font-size: 1rem;
   color: #647067;
@@ -46,7 +64,6 @@
   color: #486b52;
 }
 
-/* Recent Prayer Requests */
 
 .admin__recent {
   background: white;
@@ -56,7 +73,6 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, .05);
 }
 
-/* Community Members */
 
 .admin__members {
   margin-top: 32px;
@@ -67,7 +83,6 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, .05);
 }
 
-/* Section Headers */
 
 .admin__section-header {
   display: flex;
@@ -91,7 +106,6 @@
   font-size: 1.6rem;
 }
 
-/* Prayer List */
 
 .admin__prayer-list {
   display: grid;
@@ -142,7 +156,6 @@
   font-weight: 700;
 }
 
-/* Member List */
 
 .admin__member-list {
   display: grid;
@@ -190,7 +203,28 @@
   white-space: nowrap;
 }
 
-/* Mobile */
+.admin__awaiting {
+  margin-bottom: 32px;
+  background: white;
+  border-radius: 18px;
+  padding: 32px;
+  border: 1px solid rgba(34, 51, 39, .08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, .05);
+}
+
+.admin__awaiting-empty {
+  padding: 22px 24px;
+  background: #f8faf8;
+  border: 1px solid rgba(34, 51, 39, .08);
+  border-radius: 14px;
+}
+
+.admin__awaiting-empty p {
+  margin: 0;
+  color: #486b52;
+  line-height: 1.6;
+}
+
 
 @media (max-width: 700px) {
   .admin {
@@ -225,5 +259,9 @@
 
   .admin__prayer-meta {
     align-items: flex-start;
+  }
+
+  .admin__awaiting {
+    padding: 22px;
   }
 }

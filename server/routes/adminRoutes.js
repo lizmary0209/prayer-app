@@ -89,6 +89,30 @@ router.get(
 );
 
 router.get(
+    "/awaiting-prayer",
+    authMiddleware,
+    adminMiddleware,
+    async (req, res) => {
+        try {
+            const prayers = await Prayer.find({
+                visibility: "public",
+                prayedCount: 0,
+            }).sort({ createdAt: 1 });
+
+            res.status(200).json({
+                prayers,
+            });
+        } catch (error) {
+            console.error("Awaiting prayer error:", error);
+
+            res.status(500).json({
+                message: "Unable to load prayers awaiting support.",
+            });
+        }
+    }
+);
+
+router.get(
     "/users",
     authMiddleware,
     adminMiddleware,

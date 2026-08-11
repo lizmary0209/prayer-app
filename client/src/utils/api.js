@@ -113,5 +113,11 @@ export function getAdminUsers() {
   });
 }
 
+export function getAwaitingAdminPrayers() {
+  return request("/api/admin/awaiting-prayer", {
+    method: "GET",
+  });
+}
+
 
 

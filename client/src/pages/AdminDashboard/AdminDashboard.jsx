@@ -3,6 +3,7 @@ import {
      getAdminStats,
     getRecentAdminPrayers,
     getAdminUsers,
+    getAwaitingAdminPrayers,
  } from "../../utils/api";
 import "./AdminDashboard.css";
 
@@ -17,6 +18,8 @@ export default function AdminDashboard() {
 
     const [recentPrayers, setRecentPrayers] = useState([]);
     const [users, setUsers] = useState([]);
+    const [awaitingPrayers, setAwaitingPrayers] = useState([]);
+    const [showAwaitingPrayers, setShowAwaitingPrayers] = useState(false);
 
    const fetchStats = async () => {
     const data = await getAdminStats();
@@ -33,10 +36,16 @@ export default function AdminDashboard() {
     setUsers(Array.isArray(data?.users) ? data.users : []);
    };
 
+   const fetchAwaitingPrayers = async () => {
+    const data = await getAwaitingAdminPrayers();
+    setAwaitingPrayers(Array.isArray(data?.prayers) ? data.prayers : []);
+   };
+
     useEffect(() => {
         fetchStats();
         fetchRecentPrayers();
         fetchUsers();
+        fetchAwaitingPrayers();
     }, []);
 
 
@@ -69,11 +78,49 @@ export default function AdminDashboard() {
                     <p className="stat-card__number">{stats.prayerResponses}</p>
                 </article>
 
-                <article className="stat-card">
+                <button
+                type="button"
+                className="stat-card stat-card--clickable"
+                onClick={() => setShowAwaitingPrayers((current) => !current)}
+                aria-expanded={showAwaitingPrayers}
+                aria-controls="awaiting-prayers"
+                >
                     <h2>Awaiting First Prayer</h2>
                     <p className="stat-card__number">{stats.awaitingFirstPrayer}</p>
-                </article>
+                </button>
             </section>
+
+            {showAwaitingPrayers && (
+                <section id="awaiting-prayers" className="admin__awaiting">
+                    <div className="admin__section-header">
+                        <div>
+                            <p className="admin__section-eyebrow">Needs Support</p>
+                            <h2>Awaiting First Prayer</h2>
+                        </div>
+                    </div>
+
+                    {awaitingPrayers.length === 0 ? (
+                        <div className="admin__awaiting-empty">
+                            <p>🙏🏽 Every public prayer request has received support.</p>
+                        </div>
+                    ) : (
+                        <div className="admin__prayer-list">
+                            {awaitingPrayers.map((prayer) => (
+                                <article key={prayer._id} className="admin__prayer-card">
+                                    <div>
+                                        <h3>{prayer.title}</h3>
+                                        <p>{prayer.description}</p>
+                                    </div>
+
+                                    <span className="admin__needs-prayer">
+                                        Needs First Prayer
+                                    </span>
+                                </article>
+                            ))}
+                        </div>
+                    )}
+                </section>
+            )}
 
             <section className="admin__recent">
                 <div className="admin__section-header">
