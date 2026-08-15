@@ -4,6 +4,7 @@ import {
     getRecentAdminPrayers,
     getAdminUsers,
     getAwaitingAdminPrayers,
+    deleteAdminPrayer,
  } from "../../utils/api";
 import "./AdminDashboard.css";
 
@@ -39,6 +40,32 @@ export default function AdminDashboard() {
    const fetchAwaitingPrayers = async () => {
     const data = await getAwaitingAdminPrayers();
     setAwaitingPrayers(Array.isArray(data?.prayers) ? data.prayers : []);
+   };
+
+   const handleDeletePrayer = async (prayerId) => {
+    const confirmed = window.confirm(
+        "Are you sure you want to remove this prayer request?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        await deleteAdminPrayer(prayerId);
+
+        setRecentPrayers((currentPrayers) => 
+        currentPrayers.filter((prayer) => prayer._id !== prayerId)
+        );
+
+        setAwaitingPrayers((currentPrayers) => 
+        currentPrayers.filter((prayer) => prayer._id !== prayerId)
+    );
+
+    await fetchStats();
+    } catch (error) {
+        console.error("Unable to remove prayer:", error);
+    }
    };
 
     useEffect(() => {

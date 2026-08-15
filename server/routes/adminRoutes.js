@@ -112,6 +112,36 @@ router.get(
     }
 );
 
+router.delete(
+    "/prayer/:id",
+    authMiddleware,
+    adminMiddleware,
+    async (req, res) => {
+        try {
+            const prayer = await Prayer.findById(req.params.id);
+
+            if (!prayer) {
+                return res.status(404).json({
+                    message: "Prayer not found.",
+                });
+            }
+
+            await Prayer.findByIdAndDelete(req.params.id);
+
+            res.status(200).json({
+                message: "Prayer removed successfully.",
+                prayerId: req.params.id,
+            });
+        } catch (error) {
+            console.error("Admin delete prayer error:", error);
+            
+            res.status(500).json({
+                message: "Unable to remove prayer.",
+            });
+        }
+    }
+);
+
 router.get(
     "/users",
     authMiddleware,
