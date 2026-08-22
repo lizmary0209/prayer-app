@@ -225,6 +225,29 @@
   line-height: 1.6;
 }
 
+.admin__delete-button {
+  padding: 7px 12px;
+  border: 1px solid #7b8d80;
+  border-radius: 8px;
+  background: transparent;
+  color: #486b52;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.admin__delete-button:hover {
+  background-color: #486b52;
+  color: white;
+}
+
+.admin__delete-button:focus-visible {
+  outline: 3px solid rgba(72, 107, 82, 0.25);
+  outline-offset: 2px;
+}
+
 
 @media (max-width: 700px) {
   .admin {

@@ -120,7 +120,7 @@ export function getAwaitingAdminPrayers() {
 }
 
 export function deleteAdminPrayer(prayerId) {
-  return request(`/api/admin/prayers/${prayerId}`, {
+  return request(`/api/admin/prayer/${prayerId}`, {
     method: "DELETE",
   });
 }

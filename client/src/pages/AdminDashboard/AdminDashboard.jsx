@@ -179,6 +179,14 @@ export default function AdminDashboard() {
                                                 Needs First Prayer
                                             </span>
                                         ) : null}
+
+                                        <button
+                                        type="button"
+                                        className="admin__delete-button"
+                                        onClick={() => handleDeletePrayer(prayer._id)}
+                                        >
+                                            Delete Prayer
+                                        </button>
                                     </div>
                                 </article>
                             ))
