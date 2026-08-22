@@ -21,6 +21,7 @@ export default function AdminDashboard() {
     const [users, setUsers] = useState([]);
     const [awaitingPrayers, setAwaitingPrayers] = useState([]);
     const [showAwaitingPrayers, setShowAwaitingPrayers] = useState(false);
+    const [memberSearch, setMemberSearch] = useState("");
 
    const fetchStats = async () => {
     const data = await getAdminStats();
@@ -74,6 +75,15 @@ export default function AdminDashboard() {
         fetchUsers();
         fetchAwaitingPrayers();
     }, []);
+
+    const filteredUsers = users.filter((user) => {
+        const searchTerm = memberSearch.toLowerCase();
+
+        return (
+            user.displayName?.toLowerCase().includes(searchTerm) ||
+            user.email?.toLowerCase().includes(searchTerm)
+        );
+    });
 
 
     return (
@@ -200,14 +210,23 @@ export default function AdminDashboard() {
                                 <p className="admin__section-eyebrow">Community</p>
                         <h2>Community Members</h2>
                     </div>
-                </div>
+                        </div>
+
+                        <input
+                        type="search"
+                        className="admin__member-search"
+                        placeholder="Search members by name or email"
+                        value={memberSearch}
+                        onChange={(event) => setMemberSearch(event.target.value)}
+                        aria-label="Search community members"
+                        />
 
                 
                         <div className="admin__member-list">
-                            {users.length === 0 ? (
+                            {filteredUsers.length === 0 ? (
                                 <p>No community members yet.</p>
                             ) : (
-                                users.map((user) => (
+                               filteredUsers.map((user) => (
                                     <article key={user._id} className="admin__member-card">
                                         <div>
                                             <h3>{user.displayName || "Selah Member"}</h3>

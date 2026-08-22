@@ -248,6 +248,24 @@
   outline-offset: 2px;
 }
 
+.admin__member-search {
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 20px;
+  padding: 11px 14px;
+  border: 1px solid rgba(34, 51, 39, 0.18);
+  border-radius: 10px;
+  background-color: #f8faf8;
+  color: #233327;
+  font: inherit;
+}
+
+.admin__member-search:focus {
+  outline: none;
+  border-color: #7b8d80;
+  box-shadow: 0 0 0 3px rgba(72, 107, 82, 0.12);
+}
+
 
 @media (max-width: 700px) {
   .admin {
