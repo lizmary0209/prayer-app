@@ -22,6 +22,8 @@ export default function AdminDashboard() {
     const [awaitingPrayers, setAwaitingPrayers] = useState([]);
     const [showAwaitingPrayers, setShowAwaitingPrayers] = useState(false);
     const [memberSearch, setMemberSearch] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
    const fetchStats = async () => {
     const data = await getAdminStats();
@@ -70,10 +72,26 @@ export default function AdminDashboard() {
    };
 
     useEffect(() => {
-        fetchStats();
-        fetchRecentPrayers();
-        fetchUsers();
-        fetchAwaitingPrayers();
+        const loadDashboard = async () => {
+            try {
+                setLoading(true);
+                setError("");
+
+                await Promise.all([
+                    fetchStats(),
+                    fetchRecentPrayers(),
+                    fetchUsers(),
+                    fetchAwaitingPrayers(),
+                ]);
+            } catch (error) {
+                console.error("Unable to load admin dashboard:", error);
+                setError("Unable to load the admin dashboard. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadDashboard();
     }, []);
 
     const filteredUsers = users.filter((user) => {
@@ -84,6 +102,14 @@ export default function AdminDashboard() {
             user.email?.toLowerCase().includes(searchTerm)
         );
     });
+
+    if (loading) {
+        return <p className="admin__status">Loading Selah dashboard...</p>;
+    }
+
+    if (error) {
+        return <p className="admin__status admin__status--error">{error}</p>;
+    }
 
 
     return (
