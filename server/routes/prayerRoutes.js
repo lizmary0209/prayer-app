@@ -40,24 +40,53 @@ router.post("/", authMiddleware, async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const prayers = await Prayer.find({
-      $or: [
-        { visibility: "public" },
-        { visibility: { $exists: false } },
-      ],
-    })
-      .populate("createdBy", "displayName profilePic")
-      .sort({ createdAt: -1 });
+    const prayers = await Prayer.aggregate([
+      {
+        $match: {
+          $or: [
+            { visibility: "public" },
+            { visibility: { $exists: false } },
+          ],
+        },
+      },
+      {
+        $addFields: {
+          prayedCountSafe: {
+            $ifNull: ["$prayedCount", 0],
+          },
+        },
+      },
+      {
+        $addFields: {
+          priorityGroup: {
+            $cond: [{ $eq: ["$prayedCountSafe", 0] }, 0, 1],
+          },
+        },
+      },
+      {
+        $sort: {
+          priorityGroup: 1,
+          prayedCountSafe: 1,
+          createdAt: 1,
+        },
+      },
+    ]);
+
+    await Prayer.populate(prayers, {
+      path: "createdBy",
+      select: "displayName profilePic",
+    });
 
     res.status(200).json({
       message: "Prayers fetched successfully",
       prayers,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Prayer wall fetch error:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 router.patch("/:id", authMiddleware, async (req, res) => {
   try {
