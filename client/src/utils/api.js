@@ -125,5 +125,20 @@ export function deleteAdminPrayer(prayerId) {
   });
 }
 
+export function getPrayerForAnother(exclude = []) {
+  const params = new URLSearchParams();
+
+  exclude.forEach((id) => params.append("exclude", id));
+
+  const query = params.toString();
+
+  return request(
+    `/api/prayers/pray-for-another${query ? `?${query}` : ""}`,
+    {
+      method: "GET",
+    }
+  );
+}
+
 
 

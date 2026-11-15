@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
 const Prayer = require("../models/Prayer");
+const mongoose = require("mongoose");
 
 router.get("/protected", authMiddleware, (req, res) => {
   res.json({ message:"Protected route ok", user:req.user });
@@ -84,6 +85,67 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.error("Prayer wall fetch error:", error);
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/pray-for-another", authMiddleware, async (req, res) => {
+  try {
+    const excludeIds = Array.isArray(req.query.exclude)
+    ? req.query.exclude
+    : req.query.exclude
+    ? [req.query.exclude]
+    : [];
+
+    const matchStage = {
+      visibility: "public",
+      createdBy: { 
+        $ne: new mongoose.Types.ObjectId(req.user.id),
+       },
+    };
+
+    if (excludeIds.length > 0) {
+      matchStage._id = {
+        $nin: excludeIds.map((id) => new mongoose.Types.ObjectId(id)),
+      };
+    }
+
+    const prayers = await Prayer.aggregate([
+      { $match: matchStage },
+      {
+        $addFields: {
+          prayedCountSafe: {
+            $ifNull: ["$prayedCount", 0],
+          },
+        },
+      },
+      {
+        $sort: {
+          prayedCountSafe: 1,
+          createdAt: 1,
+        },
+      },
+      { $limit: 1 },
+    ]);
+
+    if (prayers.length === 0) {
+      return res.status(404).json({
+        message: "No prayer requests are available right now.",
+      });
+    }
+
+    await Prayer.populate(prayers, {
+      path: "createdBy",
+      select: "displayName profilePic",
+    });
+
+    res.status(200).json({
+      prayer: prayers[0],
+    });
+  } catch (error) {
+    console.error("Pray for another error:", error);
+    res.status(500).json({
+      message: "Unable to find a prayer request.",
+    });
   }
 });
 

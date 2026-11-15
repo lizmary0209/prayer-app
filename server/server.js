@@ -1,7 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const dns = require("dns");
 require("dotenv").config();
+
+dns.setServers(["1.1.1.1", "1.0.0.1"]);
 
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
