@@ -1,6 +1,5 @@
 .pray-another {
-    min-height: calc(100vh - 80px);
-    padding: 48px 24px;
+    padding: 48px 24px 72px;
     background: #eef4f0;
 }
 
@@ -58,10 +57,13 @@
 
 .pray-another__scripture {
     margin: 0 0 20px;
-    padding-left: 16px;
+    padding: 14px 18px;
     border-left: 3px solid #8ca692;
+    border-radius: 0 12px 12px 0;
+    background: #f6f8f5;
     font-style: italic;
-    color: #516055;
+    color: #46564b;
+    line-height: 1.6;
 }
 
 .pray-another__support {
