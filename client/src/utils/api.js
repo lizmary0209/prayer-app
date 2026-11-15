@@ -140,5 +140,11 @@ export function getPrayerForAnother(exclude = []) {
   );
 }
 
+export function prayForPrayer(prayerId) {
+  return request(`/api/prayers/${prayerId}/pray`, {
+    method: "PUT",
+  });
+}
+
 
 

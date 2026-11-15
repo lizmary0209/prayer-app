@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getPrayerForAnother } from "../../utils/api";
+import { getPrayerForAnother, prayForPrayer } from "../../utils/api";
 import "./PrayForAnother.css";
 
 export default function PrayForAnother() {
@@ -48,6 +48,7 @@ export default function PrayForAnother() {
         await loadPrayer(updatedSeenIds);
     }
 
+
     if (loading) {
         return (
             <main className="pray-another">
@@ -56,6 +57,28 @@ export default function PrayForAnother() {
                 </p>
             </main>
         );
+    }
+
+    async function handlePrayed() {
+        if (!prayer?._id) return;
+
+        try {
+            setError("");
+
+            await prayForPrayer(prayer._id);
+
+            const updatedSeenIds = [...seenPrayerIds, prayer._id];
+
+            setSeenPrayerIds(updatedSeenIds);
+            setMessage("Thank you for praying. 🙏🏽 Finding someone else who needs prayer...");
+
+            setTimeout(() => {
+                loadPrayer(updatedSeenIds);
+            }, 1200);
+        } catch (err) {
+            console.error("Unable to record prayer:", err);
+            setError("Unable to record your prayer right now. Please try again.");
+        }
     }
 
     return (
@@ -111,12 +134,18 @@ export default function PrayForAnother() {
                     )}
 
                     <p className="pray-another__support">
-                     🙏🏽 {prayer.prayedCount || 0}{" "}
-                     {prayer.prayedCount === 1 ? "person has prayed" : "people have prayed"}   
+                      {prayer.prayedCount === 0
+                      ? "🙏🏽 Be the first to pray"
+                      : `🙏🏽 ${prayer.prayedCount} ${prayer.prayedCount === 1
+                        ? "Person has prayed"
+                        : "people have prayed"
+                      }`}   
                     </p>
 
                     <div className="pray-another__actions">
-                        <button type="button" className="pray-another__primary">
+                        <button type="button" className="pray-another__primary"
+                        onClick={handlePrayed}
+                        >
                             I Prayed 🙏🏽
                         </button>
 
