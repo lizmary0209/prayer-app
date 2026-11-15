@@ -1,0 +1,125 @@
+.pray-another {
+    min-height: calc(100vh - 80px);
+    padding: 48px 24px;
+    background: #eef4f0;
+}
+
+.pray-another__hero {
+    max-width: 760px;
+    margin: 0 auto 32px;
+    text-align: center;
+}
+
+.pray-another__eyebrow {
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6f7f72;
+}
+
+.pray-another__hero p {
+    margin: 0;
+    color: #59665d;
+}
+
+.pray-another__card {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(30, 50, 40, 0.08);
+}
+
+.pray-another__person {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.pray-another__avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.pray-another__card h2 {
+    margin: 0 0 12px;
+    font-size: 1.8rem;
+}
+
+.pray-another__description {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.pray-another__scripture {
+    margin: 0 0 20px;
+    padding-left: 16px;
+    border-left: 3px solid #8ca692;
+    font-style: italic;
+    color: #516055;
+}
+
+.pray-another__support {
+    margin-bottom: 24px;
+    color: #59665d;
+}
+
+.pray-another__actions {
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.pray-another__primary, .pray-another__secondary {
+    min-height: 44px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    font: inherit;
+}
+
+.pray-another__primary {
+    border: none;
+    background: #446b57;
+    color: white;
+}
+
+.pray-another__secondary {
+    border: 1px solid #9cab9f;
+    background: transparent;
+    color: #33443a;
+}
+
+.pray-another__status, .pray-another__empty {
+    max-width: 760px;
+    margin: 32px auto;
+    padding: 24px;
+    text-align: center;
+}
+
+.pray-another__status--error {
+    color: #a33;
+}
+
+@media (max-width: 600px) {
+    .pray-another {
+        padding: 32px 16px;
+    }
+
+    .pray-another__card {
+        padding: 24px;
+    }
+
+    .pray-another__actions {
+        flex-direction: column;
+    }
+
+    .pray-another__primary, .pray-another__secondary {
+        width: 100%;
+    }
+}

@@ -12,6 +12,7 @@ import RegisterModal from "./components/RegisterModal/RegisterModal";
 import Profile from "./pages/Profile/Profile";
 import SalvationModal from "./components/SalvationModal/SalvationModal";
 import Home from "./pages/Home/Home";
+import PrayForAnother from "./pages/PrayForAnother/PrayForAnother";
 
 
 import { getMe, getSalvationCount } from "./utils/api";
@@ -30,6 +31,7 @@ const [salvationModalStep, setSalvationModalStep] = useState("initial");
 const [salvationModalInitialData, setSalvationModalInitialData] = useState(null);
 const [salvationCount, setSalvationCount] = useState(0);
 const [salvationEvent, setSalvationEvent] = useState(false);
+const [authChecked, setAuthChecked] = useState(false);
 
 
   function openPrayerModal(seed = null) {
@@ -125,7 +127,11 @@ async function handleSalvationSuccess(data) {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    if (!token) return;
+   
+    if (!token) {
+      setAuthChecked(true);
+      return;
+    }
 
     getMe()
     .then((data) => {
@@ -136,6 +142,9 @@ async function handleSalvationSuccess(data) {
       localStorage.removeItem("jwt");
       setIsLoggedIn(false);
       setCurrentUser(null);
+    })
+    .finally(() => {
+      setAuthChecked(true);
     });
   }, []);
 
@@ -187,6 +196,17 @@ currentUser?.role === "admin"
      refreshToken={cardsRefreshToken}
       />
     }
+  />
+
+  <Route
+  path="/pray-for-another"
+  element={
+    !authChecked
+    ? null
+    : isLoggedIn
+    ? <PrayForAnother />
+    : <Navigate to="/" replace />
+  }
   />
 
   <Route
