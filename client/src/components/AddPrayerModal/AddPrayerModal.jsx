@@ -4,12 +4,12 @@ import { createPrayer } from "../../utils/api";
 import "./AddPrayerModal.css";
 
 const CATEGORY_OPTIONS = [
+  { value: "neutral", label: "Simple / Neutral" },
   { value: "sunrise", label: "Hope & Joy" },
   { value: "water", label: "Peace & Rest" },
   { value: "mountains", label: "Strength & Courage" },
   { value: "forest", label: "Healing & Comfort" },
   { value: "fields", label: "Provision & Growth" },
-  { value: "neutral", label: "Simple / Neutral" },
 ];
 
 export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode = "add" }) {
