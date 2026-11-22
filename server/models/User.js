@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    isPrayerTeamMember: {
+      type: Boolean,
+      default: false,
+    },
     salvationStatus: {
       type: String,
       enum: ["saved_today", "already_saved", "exploring"],

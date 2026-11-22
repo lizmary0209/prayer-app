@@ -136,18 +136,22 @@ export default function AddPrayerModal({ isOpen, onClose, onSubmit, seed, mode =
 
         <label className="add-prayer__label" htmlFor="prayer-visibility">Who can see this prayer?</label>
 
-        <select 
-        id="prayer-visibility"
-        className="add-prayer__input"
-        value={visibility}
-        onChange={(e) => setVisibility(e.target.value)}
-        >
-          <option value="public">
-            Public - Visible on the Prayer Wall
+       <select
+       id="prayer-visibility"
+       className="add-prayer__input"
+       value={visibility}
+       onChange={(e) => setVisibility(e.target.value)}
+       >
+        <option value="public">
+          Public - Visible on the Prayer Wall
           </option>
 
-          <option value="private">
-            Private - Visible only on your profile
+        <option value="private">
+          Only Me - Visible only to you
+          </option>
+
+        <option value="prayer-team">
+          Private Prayer Team - Shared only with the prayer team
           </option>
         </select>
 

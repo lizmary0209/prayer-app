@@ -4,6 +4,21 @@ const authMiddleware = require("../middleware/authMiddleware");
 const Prayer = require("../models/Prayer");
 const mongoose = require("mongoose");
 
+function canAccessPrayerTeamPrayer(user, prayer) {
+  if (!user || !prayer) return false;
+
+  const userId = user._id || user.id;
+
+  const isCreator =
+  prayer.createdBy?.toString() === user.id?.toString();
+
+  const isAdmin = user.role === "admin";
+
+  const isPrayerTeamMember = user.isPrayerTeamMember === true;
+
+  return isCreator || isAdmin || isPrayerTeamMember;
+}
+
 router.get("/protected", authMiddleware, (req, res) => {
   res.json({ message:"Protected route ok", user:req.user });
 });

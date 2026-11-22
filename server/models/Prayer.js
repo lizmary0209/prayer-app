@@ -13,7 +13,7 @@ const PrayerSchema = new mongoose.Schema(
     category: { type: String, enum: ["sunrise", "water", "mountains", "forest", "fields", "neutral" ], default: "neutral", },
     visibility: {
       type: String,
-      enum: ["public", "private"],
+      enum: ["public", "private", "prayer_team"],
       default: "public",
     },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
